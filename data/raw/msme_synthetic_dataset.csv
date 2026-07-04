@@ -1,0 +1,151 @@
+business_id,business_name,sector,city_tier,business_vintage_years,segment_hidden_label,is_ntc_ntb,monthly_upi_volume_inr,avg_monthly_balance_inr,txn_count_per_month,bounce_rate_pct,balance_volatility_pct,gst_on_time_filing_pct,gst_vs_bank_turnover_gap_pct,months_since_last_gst_filing,gst_registration_vintage_years,employee_count,employee_retention_rate_pct,pf_contribution_regularity_pct,avg_salary_payment_delay_days,revenue_6m_growth_pct,revenue_volatility_pct,defaulted_12m
+MSME0001,Average Enterprises 1,Manufacturing (Light),Tier-3,4.0,Average,False,46715.0,33412.0,185.0,4.12,19.31,66.77,23.56,1,6.8,1,63.28,77.71,5.5,-0.08,11.67,0
+MSME0002,NTC Enterprises 2,Textile & Apparel,Tier-2,1.5,NTC_NTB,True,45028.0,30924.0,103.0,7.62,22.45,29.95,34.06,4,1.6,3,43.73,50.16,14.4,6.6,15.31,0
+MSME0003,Risky Enterprises 3,Construction Materials,Tier-1,5.9,Risky,False,37265.0,27237.0,111.0,11.02,26.7,19.83,39.25,4,4.5,1,22.49,18.7,21.3,4.15,20.77,0
+MSME0004,Risky Enterprises 4,IT Services,Tier-3,5.2,Risky,False,30188.0,20027.0,106.0,11.12,25.88,12.64,29.76,4,5.3,2,35.04,57.84,17.3,-6.09,20.07,1
+MSME0005,Healthy Enterprises 5,Logistics & Transport,Tier-3,9.1,Healthy,False,75099.0,41917.0,234.0,0.89,5.0,93.14,6.64,0,7.3,12,76.7,82.92,4.8,6.51,5.14,0
+MSME0006,Healthy Enterprises 6,Auto Repair & Parts,Tier-2,7.9,Healthy,False,83807.0,44936.0,261.0,2.27,8.09,96.62,6.02,2,9.0,11,83.06,75.08,0.0,12.79,5.0,0
+MSME0007,Healthy Enterprises 7,IT Services,Tier-1,9.7,Healthy,False,60921.0,51212.0,257.0,1.28,5.0,92.08,3.81,1,7.1,7,94.86,85.8,0.0,12.89,5.0,0
+MSME0008,NTC Enterprises 8,IT Services,Tier-2,1.2,NTC_NTB,True,42279.0,41750.0,148.0,3.96,16.35,42.21,33.47,5,1.3,15,44.44,51.04,9.5,-0.53,12.55,1
+MSME0009,Risky Enterprises 9,Food & Beverage,Tier-2,4.1,Risky,False,27708.0,10039.0,73.0,9.59,18.02,19.0,41.72,4,2.7,1,30.59,53.48,19.5,1.28,18.89,0
+MSME0010,Risky Enterprises 10,Textile & Apparel,Tier-1,7.1,Risky,False,29891.0,19316.0,98.0,10.42,30.54,37.01,39.3,2,1.3,1,17.33,31.1,15.3,3.84,15.63,0
+MSME0011,Healthy Enterprises 11,Agri-Trading,Tier-1,7.6,Healthy,False,73355.0,36957.0,277.0,2.53,7.95,91.78,3.51,0,8.5,13,81.87,82.7,10.9,9.16,5.48,0
+MSME0012,NTC Enterprises 12,Logistics & Transport,Tier-1,1.1,NTC_NTB,True,60482.0,32563.0,109.0,2.33,17.63,32.92,28.21,2,2.8,7,53.21,33.89,0.0,16.79,21.22,1
+MSME0013,NTC Enterprises 13,Logistics & Transport,Tier-2,4.9,NTC_NTB,True,12650.0,41663.0,157.0,8.2,20.95,56.29,27.4,3,1.9,11,63.85,44.27,9.2,19.06,6.17,0
+MSME0014,Average Enterprises 14,Retail Trade,Tier-2,4.1,Average,False,49532.0,36180.0,199.0,6.83,19.28,55.14,13.61,1,3.9,1,68.28,40.93,13.5,2.79,12.17,0
+MSME0015,Healthy Enterprises 15,Auto Repair & Parts,Tier-3,6.8,Healthy,False,100298.0,36361.0,277.0,2.42,11.26,83.15,3.48,0,2.8,8,77.45,82.9,6.2,21.01,6.21,0
+MSME0016,Healthy Enterprises 16,Retail Trade,Tier-2,7.8,Healthy,False,75379.0,48436.0,292.0,2.88,5.68,87.56,5.15,1,4.8,12,81.48,83.65,5.9,0.23,5.0,0
+MSME0017,Average Enterprises 17,IT Services,Tier-2,6.8,Average,False,54393.0,32546.0,226.0,6.51,12.88,72.2,16.67,1,2.3,3,61.0,55.68,0.0,2.07,10.0,0
+MSME0018,Average Enterprises 18,Textile & Apparel,Tier-2,5.8,Average,False,87689.0,23281.0,203.0,7.13,8.87,49.35,10.82,1,5.4,15,58.67,72.66,3.6,-8.26,11.25,0
+MSME0019,Average Enterprises 19,Food & Beverage,Tier-1,4.8,Average,False,84730.0,22185.0,226.0,4.6,17.22,51.79,24.49,1,4.9,7,45.71,62.54,8.0,11.53,10.76,0
+MSME0020,Average Enterprises 20,Logistics & Transport,Tier-1,5.4,Average,False,85325.0,21252.0,157.0,5.64,11.96,61.1,28.88,1,1.9,8,51.02,58.21,12.1,3.75,11.55,0
+MSME0021,Risky Enterprises 21,Textile & Apparel,Tier-2,3.3,Risky,False,40771.0,9597.0,106.0,11.2,22.11,32.79,41.62,0,1.4,1,28.13,29.52,12.2,-11.23,17.18,1
+MSME0022,Healthy Enterprises 22,Pharma & Healthcare Retail,Tier-3,7.6,Healthy,False,81658.0,63087.0,239.0,2.61,9.95,96.88,11.96,0,4.7,11,87.04,81.93,0.0,14.38,5.0,0
+MSME0023,Average Enterprises 23,Retail Trade,Tier-2,6.1,Average,False,50328.0,24352.0,193.0,5.63,14.34,51.83,17.4,2,5.0,2,58.89,64.76,2.2,7.91,9.61,0
+MSME0024,Average Enterprises 24,Textile & Apparel,Tier-1,4.9,Average,False,22527.0,38900.0,205.0,5.72,12.05,58.22,22.15,0,6.5,18,40.5,45.4,11.6,-0.19,12.1,0
+MSME0025,Average Enterprises 25,Textile & Apparel,Tier-2,6.9,Average,False,52146.0,31715.0,198.0,7.83,14.77,61.02,17.32,2,3.4,6,62.89,67.31,0.0,6.6,10.67,0
+MSME0026,NTC Enterprises 26,Agri-Trading,Tier-1,2.8,NTC_NTB,True,63516.0,8889.0,203.0,3.4,22.79,48.24,15.96,0,3.7,12,39.43,39.42,15.1,5.88,17.3,1
+MSME0027,Healthy Enterprises 27,IT Services,Tier-3,10.7,Healthy,False,80455.0,35651.0,257.0,1.82,7.15,90.0,9.11,0,6.5,5,79.33,84.26,8.3,7.57,6.07,0
+MSME0028,Average Enterprises 28,Manufacturing (Light),Tier-1,4.3,Average,False,77752.0,30104.0,194.0,5.15,9.97,67.32,13.24,1,3.1,10,72.08,68.84,13.9,-0.54,10.9,0
+MSME0029,Risky Enterprises 29,Pharma & Healthcare Retail,Tier-1,3.7,Risky,False,66080.0,21692.0,90.0,9.55,30.28,26.17,38.26,0,2.5,7,42.7,21.82,10.0,-8.09,16.12,0
+MSME0030,Healthy Enterprises 30,Retail Trade,Tier-1,10.7,Healthy,False,48213.0,36754.0,278.0,1.64,5.0,90.67,6.04,3,3.7,11,88.78,78.53,0.0,7.82,5.0,0
+MSME0031,Risky Enterprises 31,Retail Trade,Tier-2,3.9,Risky,False,66549.0,8643.0,140.0,5.76,17.69,19.59,28.11,3,3.6,2,28.5,35.28,21.7,-16.61,18.41,1
+MSME0032,Healthy Enterprises 32,IT Services,Tier-1,8.5,Healthy,False,56410.0,36336.0,239.0,4.56,6.36,92.88,0.36,1,9.0,15,85.74,82.08,4.8,3.87,5.0,0
+MSME0033,Healthy Enterprises 33,Pharma & Healthcare Retail,Tier-3,7.8,Healthy,False,72892.0,32491.0,278.0,2.08,5.0,94.29,3.89,0,3.9,13,74.32,92.53,0.0,20.14,5.0,0
+MSME0034,NTC Enterprises 34,IT Services,Tier-2,1.8,NTC_NTB,True,49987.0,16826.0,162.0,10.85,5.0,50.44,36.34,1,0.1,1,72.25,63.24,18.3,7.16,18.22,0
+MSME0035,NTC Enterprises 35,Textile & Apparel,Tier-3,0.2,NTC_NTB,True,36963.0,31715.0,206.0,9.58,13.18,46.12,29.05,3,1.6,1,45.82,52.38,5.3,11.58,8.01,0
+MSME0036,NTC Enterprises 36,Textile & Apparel,Tier-3,3.3,NTC_NTB,True,30743.0,31659.0,162.0,6.66,12.63,43.57,19.68,3,0.2,8,37.41,24.57,10.7,-4.04,7.09,0
+MSME0037,Average Enterprises 37,Logistics & Transport,Tier-1,5.9,Average,False,59086.0,38780.0,202.0,3.58,12.58,57.77,19.67,2,4.4,1,61.42,63.5,13.3,11.78,13.65,0
+MSME0038,Healthy Enterprises 38,Pharma & Healthcare Retail,Tier-1,12.4,Healthy,False,43086.0,40017.0,258.0,1.12,12.25,83.6,4.92,0,8.2,9,76.22,85.94,8.5,11.68,5.0,0
+MSME0039,Risky Enterprises 39,Pharma & Healthcare Retail,Tier-1,2.6,Risky,False,12363.0,27723.0,98.0,9.95,27.65,12.7,30.75,4,4.7,5,16.51,35.86,21.1,-5.62,23.17,0
+MSME0040,Average Enterprises 40,Pharma & Healthcare Retail,Tier-2,5.5,Average,False,12331.0,24552.0,181.0,6.09,7.69,43.25,18.65,2,5.5,1,63.73,55.79,6.1,-0.67,13.57,1
+MSME0041,Healthy Enterprises 41,Agri-Trading,Tier-2,8.9,Healthy,False,51159.0,45559.0,259.0,2.69,6.69,100.0,4.09,0,5.8,7,78.18,89.13,11.6,9.26,5.0,0
+MSME0042,Average Enterprises 42,Retail Trade,Tier-1,6.4,Average,False,59094.0,24279.0,190.0,5.21,17.3,64.89,24.88,1,4.2,1,46.68,65.96,5.7,-2.05,11.38,0
+MSME0043,Healthy Enterprises 43,Agri-Trading,Tier-1,6.7,Healthy,False,68649.0,50744.0,259.0,3.03,7.31,100.0,7.23,1,9.2,11,78.17,79.16,2.2,7.44,5.07,1
+MSME0044,NTC Enterprises 44,Logistics & Transport,Tier-2,1.2,NTC_NTB,True,41620.0,26163.0,169.0,8.92,14.08,44.42,27.64,2,3.4,7,50.56,33.68,16.2,12.2,21.29,1
+MSME0045,Average Enterprises 45,Logistics & Transport,Tier-1,4.7,Average,False,44333.0,39859.0,200.0,4.75,13.2,64.43,22.21,1,3.5,16,52.72,75.2,16.0,16.42,9.7,1
+MSME0046,Risky Enterprises 46,Pharma & Healthcare Retail,Tier-2,2.4,Risky,False,44901.0,16596.0,74.0,9.88,30.66,26.57,38.39,3,4.2,1,26.45,11.53,14.7,3.31,16.71,1
+MSME0047,Average Enterprises 47,Pharma & Healthcare Retail,Tier-2,2.1,Average,False,48368.0,39938.0,195.0,6.32,17.25,64.03,22.89,3,4.4,11,57.19,70.96,7.1,16.97,11.29,0
+MSME0048,Average Enterprises 48,Food & Beverage,Tier-1,3.8,Average,False,39384.0,46703.0,176.0,6.14,14.94,68.12,25.74,2,4.9,4,61.93,59.46,5.9,3.9,10.37,0
+MSME0049,Average Enterprises 49,Construction Materials,Tier-2,5.7,Average,False,36455.0,31301.0,179.0,5.58,14.56,53.41,20.88,1,6.0,10,53.56,54.0,11.9,-1.75,16.29,1
+MSME0050,Healthy Enterprises 50,Auto Repair & Parts,Tier-2,6.9,Healthy,False,78222.0,59747.0,284.0,2.16,9.6,98.11,4.62,2,9.2,22,79.46,79.88,0.0,14.74,5.18,0
+MSME0051,NTC Enterprises 51,Auto Repair & Parts,Tier-2,0.9,NTC_NTB,True,44570.0,28460.0,180.0,4.91,16.76,19.98,32.4,3,0.1,14,35.29,32.43,13.6,16.05,19.56,1
+MSME0052,NTC Enterprises 52,Construction Materials,Tier-2,1.4,NTC_NTB,True,43422.0,17282.0,126.0,8.99,17.39,48.99,25.7,4,0.1,1,67.33,18.68,14.4,4.97,10.85,0
+MSME0053,NTC Enterprises 53,Agri-Trading,Tier-2,0.1,NTC_NTB,True,26666.0,30054.0,174.0,6.59,21.88,25.05,36.65,2,0.1,5,24.86,53.05,11.2,17.84,15.84,0
+MSME0054,NTC Enterprises 54,Food & Beverage,Tier-3,5.2,NTC_NTB,True,51810.0,31531.0,111.0,8.02,22.66,53.14,29.03,4,5.4,5,44.59,51.79,10.1,0.01,11.57,0
+MSME0055,Risky Enterprises 55,Retail Trade,Tier-3,5.0,Risky,False,41745.0,20272.0,130.0,5.41,34.35,30.6,39.54,2,4.2,1,23.76,49.14,16.5,-4.26,22.11,0
+MSME0056,NTC Enterprises 56,Auto Repair & Parts,Tier-1,0.6,NTC_NTB,True,49474.0,30487.0,178.0,7.11,16.75,42.17,34.51,3,4.4,1,44.72,30.64,17.2,2.79,14.24,0
+MSME0057,Healthy Enterprises 57,Logistics & Transport,Tier-3,6.8,Healthy,False,83704.0,47060.0,273.0,2.82,9.1,86.43,6.36,0,4.4,2,76.69,91.32,0.0,10.54,5.0,0
+MSME0058,Healthy Enterprises 58,Textile & Apparel,Tier-1,5.6,Healthy,False,57498.0,67636.0,256.0,0.78,6.41,73.5,4.4,2,7.7,11,92.92,80.38,10.8,12.62,5.18,0
+MSME0059,Healthy Enterprises 59,Logistics & Transport,Tier-3,5.3,Healthy,False,42606.0,41713.0,230.0,1.26,6.43,96.35,8.75,0,5.0,15,76.11,80.65,7.3,7.35,5.0,0
+MSME0060,Average Enterprises 60,Pharma & Healthcare Retail,Tier-3,1.8,Average,False,54397.0,24419.0,182.0,5.08,19.35,50.98,20.31,4,4.8,10,68.45,53.83,5.1,5.27,12.12,0
+MSME0061,Average Enterprises 61,IT Services,Tier-2,1.6,Average,False,76894.0,24374.0,192.0,4.64,23.2,48.86,22.36,1,3.3,10,69.02,72.61,2.8,5.93,15.34,0
+MSME0062,Average Enterprises 62,IT Services,Tier-1,3.0,Average,False,49569.0,16054.0,137.0,7.11,13.33,45.16,24.71,2,4.5,11,46.21,43.32,18.4,-6.35,8.1,1
+MSME0063,NTC Enterprises 63,Pharma & Healthcare Retail,Tier-3,0.1,NTC_NTB,True,23819.0,34092.0,207.0,8.32,16.82,21.54,21.0,1,0.8,7,60.42,28.45,19.1,12.67,12.32,0
+MSME0064,Average Enterprises 64,Construction Materials,Tier-3,1.3,Average,False,45099.0,22261.0,178.0,7.34,15.71,80.87,21.77,2,3.4,8,56.63,64.37,15.3,-1.66,7.81,0
+MSME0065,Average Enterprises 65,Food & Beverage,Tier-1,3.9,Average,False,55080.0,42217.0,136.0,7.34,6.15,60.25,29.86,2,4.7,17,51.67,61.91,13.4,0.24,10.23,1
+MSME0066,Average Enterprises 66,Food & Beverage,Tier-2,5.6,Average,False,57800.0,50719.0,178.0,4.82,17.11,37.27,20.29,1,2.0,10,58.49,41.78,7.3,-16.8,12.19,0
+MSME0067,Healthy Enterprises 67,Auto Repair & Parts,Tier-3,9.9,Healthy,False,64798.0,54426.0,259.0,1.95,5.0,86.19,4.84,1,7.3,10,84.62,89.14,9.2,4.87,5.0,0
+MSME0068,NTC Enterprises 68,Food & Beverage,Tier-2,0.1,NTC_NTB,True,40629.0,34529.0,184.0,6.7,17.16,35.3,29.91,3,0.1,7,36.58,38.07,12.3,-12.82,20.92,0
+MSME0069,Healthy Enterprises 69,Retail Trade,Tier-2,11.1,Healthy,False,47421.0,29592.0,292.0,2.06,5.0,94.24,4.18,2,8.4,8,94.94,78.37,8.2,13.44,6.84,0
+MSME0070,NTC Enterprises 70,Pharma & Healthcare Retail,Tier-3,1.9,NTC_NTB,True,32699.0,33844.0,196.0,6.53,18.45,40.12,26.74,2,0.1,1,28.66,65.06,13.4,4.79,10.92,1
+MSME0071,NTC Enterprises 71,Construction Materials,Tier-1,3.9,NTC_NTB,True,22673.0,39511.0,157.0,6.3,24.38,46.67,32.74,5,0.1,11,50.68,53.22,20.1,10.88,15.44,1
+MSME0072,Healthy Enterprises 72,Auto Repair & Parts,Tier-3,8.7,Healthy,False,55412.0,49382.0,202.0,1.25,5.11,89.89,5.5,0,11.1,4,88.81,79.9,7.2,22.22,5.74,0
+MSME0073,Healthy Enterprises 73,Logistics & Transport,Tier-1,6.3,Healthy,False,72418.0,28760.0,241.0,2.53,5.0,89.64,5.96,1,6.2,6,90.87,79.03,7.8,18.89,5.0,0
+MSME0074,NTC Enterprises 74,IT Services,Tier-1,0.9,NTC_NTB,True,59263.0,34128.0,142.0,9.07,15.97,43.13,21.6,3,3.7,4,36.68,53.34,19.8,-7.92,9.52,1
+MSME0075,Risky Enterprises 75,Textile & Apparel,Tier-2,4.2,Risky,False,51456.0,7498.0,88.0,10.76,27.58,23.25,31.92,2,5.0,2,47.92,30.81,16.4,-8.53,18.77,1
+MSME0076,Risky Enterprises 76,Auto Repair & Parts,Tier-3,7.7,Risky,False,22917.0,26427.0,89.0,11.17,28.73,4.26,38.0,2,1.2,1,28.65,34.8,10.7,-4.48,21.23,1
+MSME0077,NTC Enterprises 77,Construction Materials,Tier-3,0.2,NTC_NTB,True,56751.0,34506.0,174.0,6.84,20.46,29.74,40.12,4,1.7,7,45.06,56.34,9.0,-15.35,5.0,0
+MSME0078,Healthy Enterprises 78,Manufacturing (Light),Tier-2,6.6,Healthy,False,72980.0,43299.0,259.0,1.83,5.17,92.37,5.48,0,7.0,15,77.84,81.6,5.7,17.57,5.0,0
+MSME0079,Average Enterprises 79,IT Services,Tier-2,3.6,Average,False,20382.0,37270.0,213.0,4.72,14.66,57.87,21.58,3,6.3,5,62.88,69.29,12.5,3.97,12.6,0
+MSME0080,Healthy Enterprises 80,Agri-Trading,Tier-2,5.5,Healthy,False,52039.0,36033.0,247.0,1.87,5.0,91.8,4.65,1,12.3,9,82.91,84.28,13.6,11.6,5.0,1
+MSME0081,NTC Enterprises 81,Logistics & Transport,Tier-2,1.3,NTC_NTB,True,8556.0,19422.0,180.0,10.45,18.1,31.26,28.9,4,0.1,2,44.21,38.56,13.1,21.6,14.66,1
+MSME0082,Risky Enterprises 82,Pharma & Healthcare Retail,Tier-2,2.1,Risky,False,5000.0,10398.0,108.0,7.83,22.31,44.65,31.68,2,0.1,1,27.95,16.43,16.2,4.17,17.38,0
+MSME0083,Average Enterprises 83,Food & Beverage,Tier-1,7.3,Average,False,79898.0,16357.0,196.0,4.19,18.04,57.55,20.12,0,3.1,8,70.2,50.85,7.7,10.8,9.08,0
+MSME0084,Healthy Enterprises 84,IT Services,Tier-1,10.6,Healthy,False,72547.0,41003.0,280.0,3.32,12.21,91.48,6.98,1,6.3,12,80.23,83.01,11.1,7.17,6.55,0
+MSME0085,Average Enterprises 85,Construction Materials,Tier-1,6.3,Average,False,51613.0,31902.0,145.0,5.92,13.05,74.77,21.12,2,4.9,1,75.49,43.39,14.5,8.45,10.11,0
+MSME0086,Average Enterprises 86,Manufacturing (Light),Tier-1,3.1,Average,False,39468.0,37943.0,177.0,4.9,10.84,73.12,17.68,1,4.6,9,64.72,54.59,4.8,-5.46,9.84,0
+MSME0087,Risky Enterprises 87,Agri-Trading,Tier-1,2.8,Risky,False,21916.0,16961.0,119.0,11.08,30.01,52.57,36.85,5,1.4,14,26.2,27.18,16.9,-7.75,19.76,0
+MSME0088,Risky Enterprises 88,Agri-Trading,Tier-1,2.7,Risky,False,19707.0,25102.0,148.0,9.59,25.32,32.7,39.81,2,3.5,9,35.01,31.9,22.5,-27.63,21.53,1
+MSME0089,NTC Enterprises 89,Retail Trade,Tier-2,2.2,NTC_NTB,True,38765.0,24659.0,163.0,7.89,20.78,54.4,25.13,3,2.3,3,47.51,29.0,17.0,3.93,16.4,0
+MSME0090,Average Enterprises 90,Construction Materials,Tier-3,5.3,Average,False,25708.0,10861.0,150.0,9.05,12.67,70.43,20.55,1,5.6,1,45.03,53.57,3.8,-0.18,13.71,1
+MSME0091,Healthy Enterprises 91,Pharma & Healthcare Retail,Tier-3,6.2,Healthy,False,96518.0,42015.0,237.0,0.89,5.0,78.5,6.8,1,3.8,15,79.1,82.88,12.6,16.3,5.0,0
+MSME0092,Risky Enterprises 92,IT Services,Tier-3,9.4,Risky,False,17213.0,21595.0,101.0,11.59,30.63,43.76,25.33,3,4.5,6,36.37,30.58,13.8,-19.58,17.56,0
+MSME0093,NTC Enterprises 93,Construction Materials,Tier-1,1.1,NTC_NTB,True,41380.0,15620.0,191.0,6.15,14.45,37.98,36.71,3,0.1,9,38.85,24.13,20.0,10.39,13.22,0
+MSME0094,Risky Enterprises 94,Pharma & Healthcare Retail,Tier-3,2.4,Risky,False,74307.0,15036.0,124.0,11.72,31.58,26.38,32.95,1,1.4,9,46.16,17.66,14.5,-6.21,20.34,0
+MSME0095,NTC Enterprises 95,Manufacturing (Light),Tier-1,0.1,NTC_NTB,True,27279.0,28281.0,162.0,6.47,17.29,48.84,20.36,2,0.7,1,50.55,49.39,5.5,-7.95,5.0,0
+MSME0096,Average Enterprises 96,Textile & Apparel,Tier-1,2.5,Average,False,51943.0,30854.0,196.0,3.99,15.64,65.91,17.79,3,3.1,3,63.01,76.3,10.9,8.57,10.03,0
+MSME0097,Average Enterprises 97,Agri-Trading,Tier-3,0.8,Average,False,41771.0,35519.0,204.0,6.85,11.43,49.19,19.15,3,2.6,10,62.1,64.85,18.8,15.25,9.79,0
+MSME0098,Average Enterprises 98,Manufacturing (Light),Tier-3,4.9,Average,False,50735.0,34017.0,185.0,7.22,15.01,44.04,25.68,1,2.7,4,70.37,38.78,26.2,11.6,12.0,1
+MSME0099,Healthy Enterprises 99,IT Services,Tier-1,11.5,Healthy,False,70446.0,42438.0,220.0,3.12,5.0,81.52,8.66,1,7.2,16,90.56,89.85,1.9,16.87,5.0,0
+MSME0100,Healthy Enterprises 100,Logistics & Transport,Tier-2,7.7,Healthy,False,62653.0,43945.0,259.0,1.69,6.75,97.24,3.91,1,4.7,21,86.71,92.35,7.9,13.87,5.93,0
+MSME0101,Healthy Enterprises 101,Logistics & Transport,Tier-3,8.7,Healthy,False,53030.0,36393.0,277.0,1.68,5.63,92.2,5.16,1,3.9,10,82.47,82.14,0.0,17.77,5.0,0
+MSME0102,Risky Enterprises 102,Retail Trade,Tier-1,5.4,Risky,False,43056.0,33917.0,125.0,5.96,33.2,24.33,28.83,3,0.1,1,45.57,35.56,21.6,-11.26,14.88,0
+MSME0103,Average Enterprises 103,Pharma & Healthcare Retail,Tier-2,3.8,Average,False,61976.0,24063.0,170.0,5.29,10.35,52.63,17.86,2,4.5,8,65.66,56.76,12.5,3.26,12.12,0
+MSME0104,Average Enterprises 104,Textile & Apparel,Tier-2,3.0,Average,False,47586.0,27684.0,171.0,5.47,15.92,54.08,18.23,2,4.3,6,42.33,57.97,5.6,11.08,10.57,0
+MSME0105,NTC Enterprises 105,Manufacturing (Light),Tier-1,0.1,NTC_NTB,True,62527.0,24939.0,155.0,7.62,16.22,65.25,28.36,3,2.7,14,41.1,44.98,18.9,13.78,17.37,0
+MSME0106,Average Enterprises 106,Retail Trade,Tier-2,7.8,Average,False,38179.0,31908.0,178.0,6.39,17.32,51.67,20.46,1,5.6,8,58.74,63.93,9.1,10.58,8.84,0
+MSME0107,Average Enterprises 107,Logistics & Transport,Tier-2,3.4,Average,False,46035.0,32538.0,211.0,4.7,7.42,62.3,24.45,0,5.3,11,37.54,49.57,8.5,2.71,9.39,0
+MSME0108,NTC Enterprises 108,Agri-Trading,Tier-3,1.5,NTC_NTB,True,42387.0,44511.0,176.0,8.26,27.51,31.95,33.78,3,3.7,1,38.73,50.26,14.4,16.78,15.36,0
+MSME0109,Average Enterprises 109,Manufacturing (Light),Tier-3,4.5,Average,False,44802.0,32214.0,165.0,8.52,9.41,61.66,29.11,2,3.6,5,56.38,70.36,0.0,15.04,7.56,1
+MSME0110,Healthy Enterprises 110,Construction Materials,Tier-3,6.1,Healthy,False,76828.0,42884.0,263.0,1.87,5.0,83.7,6.47,1,7.1,13,78.51,82.16,7.4,11.59,5.0,0
+MSME0111,Average Enterprises 111,Manufacturing (Light),Tier-3,6.2,Average,False,54190.0,39437.0,198.0,6.44,18.42,40.95,17.8,2,6.8,8,50.4,50.64,14.9,2.43,11.38,0
+MSME0112,Healthy Enterprises 112,Logistics & Transport,Tier-3,12.0,Healthy,False,98006.0,27568.0,280.0,1.63,7.9,76.18,8.68,0,8.5,10,76.28,79.56,7.9,12.51,5.55,0
+MSME0113,NTC Enterprises 113,Manufacturing (Light),Tier-1,1.6,NTC_NTB,True,40731.0,18615.0,201.0,5.79,11.19,42.56,24.84,1,0.1,7,33.43,66.62,15.9,2.49,10.25,0
+MSME0114,NTC Enterprises 114,Textile & Apparel,Tier-1,0.1,NTC_NTB,True,55169.0,28376.0,191.0,5.72,10.0,48.28,14.65,2,0.1,1,41.01,64.61,16.6,3.58,17.58,0
+MSME0115,Risky Enterprises 115,Agri-Trading,Tier-1,2.0,Risky,False,39751.0,15488.0,90.0,11.88,32.96,41.79,34.43,2,1.3,6,34.18,44.02,20.8,-18.02,22.66,0
+MSME0116,NTC Enterprises 116,Manufacturing (Light),Tier-3,0.1,NTC_NTB,True,47753.0,27111.0,176.0,6.11,16.18,34.99,35.65,2,0.1,2,55.45,53.74,10.3,-0.81,20.25,0
+MSME0117,NTC Enterprises 117,Textile & Apparel,Tier-2,1.2,NTC_NTB,True,33313.0,39055.0,163.0,7.57,21.72,27.98,31.16,4,4.4,6,47.14,53.23,13.7,19.31,9.91,1
+MSME0118,Healthy Enterprises 118,Auto Repair & Parts,Tier-1,6.7,Healthy,False,52819.0,40859.0,243.0,2.27,6.24,84.02,4.51,0,6.1,14,81.18,88.05,3.6,5.13,5.58,0
+MSME0119,NTC Enterprises 119,Logistics & Transport,Tier-2,0.3,NTC_NTB,True,41662.0,23114.0,169.0,7.65,23.36,57.38,27.84,1,0.1,8,38.43,38.51,14.2,5.53,13.62,0
+MSME0120,Average Enterprises 120,IT Services,Tier-1,3.2,Average,False,35737.0,31770.0,150.0,5.93,12.68,75.35,20.54,2,8.2,3,61.92,47.33,12.2,16.71,9.7,0
+MSME0121,NTC Enterprises 121,Logistics & Transport,Tier-2,0.1,NTC_NTB,True,61849.0,35609.0,126.0,8.42,21.15,21.56,28.71,3,4.1,10,39.63,70.34,12.7,3.54,12.32,1
+MSME0122,NTC Enterprises 122,Manufacturing (Light),Tier-1,3.9,NTC_NTB,True,51462.0,32670.0,137.0,9.81,17.93,48.74,28.06,3,1.4,1,56.99,73.58,15.2,-3.19,15.84,0
+MSME0123,Average Enterprises 123,Textile & Apparel,Tier-3,2.5,Average,False,37844.0,25476.0,163.0,4.58,14.96,53.56,23.07,3,2.8,8,62.5,62.25,10.9,9.35,12.7,0
+MSME0124,Healthy Enterprises 124,Manufacturing (Light),Tier-2,11.0,Healthy,False,81309.0,31492.0,247.0,1.71,8.58,85.48,10.09,1,8.8,10,89.63,75.08,5.1,10.1,7.01,0
+MSME0125,Average Enterprises 125,IT Services,Tier-1,3.3,Average,False,37573.0,11558.0,210.0,4.34,15.1,58.62,26.69,2,5.6,10,70.23,55.85,19.8,-10.3,13.72,0
+MSME0126,Average Enterprises 126,Manufacturing (Light),Tier-1,5.9,Average,False,58141.0,31687.0,131.0,5.39,12.13,61.58,33.43,2,3.4,12,62.34,61.78,13.5,18.81,8.35,0
+MSME0127,NTC Enterprises 127,Textile & Apparel,Tier-2,2.7,NTC_NTB,True,45682.0,41457.0,158.0,7.51,14.26,36.55,30.63,1,0.1,9,48.25,42.88,8.8,-0.71,13.91,0
+MSME0128,NTC Enterprises 128,Retail Trade,Tier-1,4.0,NTC_NTB,True,65193.0,39418.0,152.0,5.64,12.9,66.84,38.31,2,4.7,6,58.69,50.12,14.5,8.8,11.97,1
+MSME0129,Healthy Enterprises 129,Food & Beverage,Tier-1,7.9,Healthy,False,107312.0,33604.0,292.0,3.15,6.67,98.55,7.12,1,6.9,16,88.58,78.25,0.0,11.03,5.0,1
+MSME0130,Average Enterprises 130,Manufacturing (Light),Tier-1,4.6,Average,False,42740.0,28794.0,210.0,6.37,15.36,61.72,17.48,1,2.7,6,70.12,48.3,7.1,-5.03,7.43,0
+MSME0131,Average Enterprises 131,Auto Repair & Parts,Tier-2,3.2,Average,False,58321.0,29374.0,214.0,5.15,13.8,69.47,16.57,2,0.7,16,68.86,82.75,17.2,-4.13,13.21,0
+MSME0132,Average Enterprises 132,Retail Trade,Tier-2,4.3,Average,False,33083.0,32578.0,194.0,7.99,19.06,61.72,24.24,1,4.8,16,56.04,50.37,7.2,-3.85,9.28,1
+MSME0133,Healthy Enterprises 133,Pharma & Healthcare Retail,Tier-1,9.0,Healthy,False,65513.0,33846.0,269.0,2.2,9.72,75.0,12.56,1,5.4,14,89.78,82.69,0.0,10.59,6.37,1
+MSME0134,Average Enterprises 134,Manufacturing (Light),Tier-3,3.6,Average,False,69225.0,23405.0,222.0,5.08,14.96,57.01,22.21,1,4.1,1,68.48,64.04,9.0,0.62,13.14,0
+MSME0135,NTC Enterprises 135,Textile & Apparel,Tier-3,3.4,NTC_NTB,True,80742.0,18090.0,138.0,4.66,16.58,53.19,23.81,4,0.9,1,28.98,31.67,9.2,4.38,18.35,0
+MSME0136,Average Enterprises 136,Agri-Trading,Tier-2,5.4,Average,False,55730.0,19105.0,151.0,7.75,20.06,37.35,13.89,3,4.0,11,57.44,63.89,10.5,0.85,14.26,0
+MSME0137,Average Enterprises 137,IT Services,Tier-3,6.1,Average,False,38463.0,27118.0,217.0,7.97,17.23,52.08,28.94,1,3.3,9,71.99,65.69,12.6,7.34,11.52,0
+MSME0138,Risky Enterprises 138,Construction Materials,Tier-2,2.8,Risky,False,23551.0,12321.0,110.0,9.12,27.0,48.28,37.78,3,4.5,8,19.22,30.42,30.3,3.7,17.99,1
+MSME0139,Average Enterprises 139,Pharma & Healthcare Retail,Tier-1,5.0,Average,False,44289.0,24089.0,136.0,4.01,17.83,62.84,22.22,0,3.2,14,57.14,46.55,9.9,-1.55,12.3,0
+MSME0140,NTC Enterprises 140,Textile & Apparel,Tier-1,2.2,NTC_NTB,True,25731.0,21340.0,133.0,5.93,18.87,47.14,26.66,2,0.1,6,39.82,56.88,3.6,2.55,14.58,0
+MSME0141,NTC Enterprises 141,Auto Repair & Parts,Tier-3,2.5,NTC_NTB,True,45747.0,26692.0,173.0,6.68,25.42,31.01,24.82,1,0.1,1,52.62,50.25,7.1,11.66,18.96,0
+MSME0142,Average Enterprises 142,Auto Repair & Parts,Tier-3,8.0,Average,False,79407.0,38612.0,177.0,3.4,11.87,74.07,18.77,1,3.4,17,72.63,77.97,9.7,6.13,7.31,0
+MSME0143,Average Enterprises 143,Logistics & Transport,Tier-3,9.5,Average,False,53089.0,29242.0,122.0,5.36,15.97,67.46,27.02,4,6.5,4,55.26,64.65,13.1,15.72,18.09,0
+MSME0144,Average Enterprises 144,Retail Trade,Tier-2,4.9,Average,False,57519.0,41832.0,203.0,5.51,10.94,53.57,18.82,2,3.9,4,51.4,57.37,14.9,15.46,10.84,0
+MSME0145,Average Enterprises 145,Retail Trade,Tier-3,4.1,Average,False,47000.0,35858.0,181.0,8.2,19.27,66.75,20.59,1,5.4,2,71.81,56.4,12.0,-2.55,13.35,0
+MSME0146,Healthy Enterprises 146,Pharma & Healthcare Retail,Tier-1,7.5,Healthy,False,79361.0,44299.0,267.0,1.12,7.11,88.59,4.07,0,8.2,16,83.07,73.39,0.0,9.93,7.32,0
+MSME0147,Risky Enterprises 147,Pharma & Healthcare Retail,Tier-3,3.2,Risky,False,29376.0,19518.0,102.0,10.07,32.31,41.85,38.35,2,1.2,9,38.76,44.73,14.5,-7.84,14.58,1
+MSME0148,Average Enterprises 148,Food & Beverage,Tier-3,7.2,Average,False,42603.0,19893.0,181.0,5.03,12.89,50.85,24.24,1,0.1,9,64.53,50.84,7.7,-0.67,10.46,0
+MSME0149,Healthy Enterprises 149,Pharma & Healthcare Retail,Tier-1,8.3,Healthy,False,87066.0,36843.0,229.0,1.29,5.65,82.32,6.44,1,9.0,12,79.5,84.47,0.0,11.82,5.07,0
+MSME0150,Average Enterprises 150,Auto Repair & Parts,Tier-1,2.7,Average,False,39939.0,38291.0,189.0,7.41,12.15,64.89,20.9,2,6.5,11,60.6,43.11,5.7,3.12,11.65,0
