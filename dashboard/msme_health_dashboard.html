@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MSME Smart Credit Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root{
+    --bg:#F6F4EC;
+    --sidebar:#102A20;
+    --sidebar-hover:#1B3D2E;
+    --sidebar-text:#B9C9BE;
+    --glass:rgba(255,255,255,0.72);
+    --glass-border:rgba(16,42,32,0.08);
+    --ink:#161C18;
+    --muted:#6C7670;
+    --primary:#1F8A5B;
+    --primary-dark:#146945;
+    --primary-soft:#E3F3EA;
+    --gold:#C9A227;
+    --gold-soft:#F6EFD9;
+    --risk:#C0504D;
+    --risk-soft:#FBEBEA;
+    --caution:#B8862B;
+    --caution-soft:#F7EFDD;
+    --shadow:0 8px 24px rgba(16,42,32,0.08);
+    --shadow-lg:0 16px 40px rgba(16,42,32,0.14);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .app{display:grid;grid-template-columns:236px 1fr;min-height:100vh;}
+
+  /* ---------------- SIDEBAR ---------------- */
+  .sidebar{
+    background:var(--sidebar);
+    color:var(--sidebar-text);
+    padding:26px 18px;
+    display:flex;
+    flex-direction:column;
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:36px;padding:0 6px;}
+  .brand-mark{
+    width:34px;height:34px;border-radius:9px;
+    background:linear-gradient(135deg,var(--primary),var(--gold));
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;color:#fff;font-size:15px;
+    flex-shrink:0;
+  }
+  .brand-name{font-size:14px;font-weight:700;color:#fff;line-height:1.25;}
+  .brand-sub{font-size:10px;color:var(--sidebar-text);opacity:.8;}
+
+  .nav-section-label{
+    font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+    color:rgba(185,201,190,.55);margin:18px 10px 8px;
+  }
+  .nav-item{
+    display:flex;align-items:center;gap:11px;
+    padding:10px 12px;border-radius:9px;
+    font-size:13.5px;font-weight:500;
+    cursor:pointer;margin-bottom:2px;
+    transition:background .15s ease;
+  }
+  .nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.85;}
+  .nav-item:hover{background:var(--sidebar-hover);}
+  .nav-item.active{background:var(--primary);color:#fff;}
+  .nav-item.active svg{opacity:1;}
+
+  .sidebar-footer{
+    margin-top:auto;
+    padding:14px 12px;
+    border-top:1px solid rgba(255,255,255,.08);
+    font-size:10.5px;
+    color:rgba(185,201,190,.6);
+    line-height:1.6;
+  }
+
+  /* ---------------- MAIN ---------------- */
+  .main{padding:28px 34px 60px;position:relative;}
+  .topbar{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    margin-bottom:24px;gap:20px;flex-wrap:wrap;
+  }
+  .page-title{font-size:23px;font-weight:800;letter-spacing:-.01em;}
+  .page-sub{font-size:12.5px;color:var(--muted);margin-top:4px;}
+
+  .topbar-controls{display:flex;gap:10px;flex-wrap:wrap;}
+  .search-box{
+    display:flex;align-items:center;gap:7px;
+    background:var(--glass);border:1px solid var(--glass-border);
+    border-radius:10px;padding:8px 12px;
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(6px);
+  }
+  .search-box svg{width:14px;height:14px;color:var(--muted);flex-shrink:0;}
+  .search-box input{
+    border:none;background:transparent;outline:none;
+    font-family:'Inter',sans-serif;font-size:13px;width:190px;color:var(--ink);
+  }
+  select.filter-select{
+    background:var(--glass);border:1px solid var(--glass-border);
+    border-radius:10px;padding:9px 12px;font-size:13px;font-family:'Inter',sans-serif;
+    color:var(--ink);box-shadow:var(--shadow);backdrop-filter:blur(6px);
+  }
+
+  /* ---------------- KPI CARDS ---------------- */
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px;}
+  .kpi-card{
+    background:var(--glass);border:1px solid var(--glass-border);
+    border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);
+    backdrop-filter:blur(10px);
+  }
+  .kpi-top{display:flex;justify-content:space-between;align-items:flex-start;}
+  .kpi-icon{
+    width:36px;height:36px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .kpi-icon svg{width:18px;height:18px;}
+  .kpi-trend{
+    font-size:11px;font-weight:600;padding:3px 8px;border-radius:100px;
+  }
+  .trend-up{background:var(--primary-soft);color:var(--primary-dark);}
+  .trend-flat{background:var(--gold-soft);color:var(--caution);}
+  .kpi-value{font-size:28px;font-weight:800;margin-top:14px;letter-spacing:-.02em;}
+  .kpi-label{font-size:12px;color:var(--muted);margin-top:2px;}
+
+  /* ---------------- CHARTS ROW ---------------- */
+  .charts-row{display:grid;grid-template-columns:1fr 1fr 1.1fr;gap:16px;margin-bottom:22px;align-items:stretch;}
+  .panel{
+    background:var(--glass);border:1px solid var(--glass-border);
+    border-radius:16px;padding:20px;box-shadow:var(--shadow);
+    backdrop-filter:blur(10px);
+  }
+  .panel-title{
+    font-size:13px;font-weight:700;margin-bottom:2px;
+  }
+  .panel-sub{font-size:11px;color:var(--muted);margin-bottom:14px;}
+
+  .donut-wrap{display:flex;align-items:center;gap:16px;}
+  .donut-legend{display:flex;flex-direction:column;gap:6px;font-size:12px;}
+  .legend-item{display:flex;align-items:center;gap:7px;}
+  .legend-dot{width:9px;height:9px;border-radius:3px;}
+  .legend-count{margin-left:auto;color:var(--muted);font-weight:600;}
+
+  .insights-panel .insight-item{
+    display:flex;gap:10px;padding:10px 0;
+    border-bottom:1px solid var(--glass-border);
+    font-size:12.5px;line-height:1.5;color:var(--ink);
+  }
+  .insights-panel .insight-item:last-child{border-bottom:none;}
+  .insight-bullet{
+    width:20px;height:20px;border-radius:6px;background:var(--primary-soft);color:var(--primary-dark);
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;
+  }
+
+  /* ---------------- BUSINESS LIST ---------------- */
+  .list-panel{background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;box-shadow:var(--shadow);backdrop-filter:blur(10px);overflow:hidden;}
+  .list-header{display:flex;justify-content:space-between;align-items:center;padding:18px 20px 12px;}
+  .biz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;padding:4px 20px 20px;}
+  .biz-card{
+    background:#fff;border:1px solid var(--glass-border);border-radius:13px;
+    padding:14px 16px;cursor:pointer;transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .biz-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+  .biz-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .biz-name{font-size:13.5px;font-weight:700;line-height:1.3;}
+  .biz-name .hero-badge{
+    display:inline-block;font-size:9.5px;font-weight:700;color:var(--gold);
+    background:var(--gold-soft);padding:1px 6px;border-radius:5px;margin-left:6px;vertical-align:middle;
+  }
+  .biz-sector{font-size:11px;color:var(--muted);margin-top:2px;}
+  .grade-badge{
+    font-size:12px;font-weight:800;width:28px;height:28px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .grade-A{background:var(--primary-soft);color:var(--primary-dark);}
+  .grade-B{background:#E8F0FA;color:#2A5C8A;}
+  .grade-C{background:var(--caution-soft);color:var(--caution);}
+  .grade-D{background:var(--risk-soft);color:var(--risk);}
+
+  .biz-progress-track{height:6px;background:#EEEBE0;border-radius:4px;overflow:hidden;margin-top:12px;}
+  .biz-progress-fill{height:100%;border-radius:4px;width:0;transition:width .8s cubic-bezier(.22,1,.36,1);}
+  .biz-card-foot{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:8px;}
+  .biz-score-num{font-weight:700;color:var(--ink);}
+
+  .empty-msg{padding:40px;text-align:center;color:var(--muted);font-size:13px;}
+
+  /* ---------------- DRAWER ---------------- */
+  .overlay{
+    position:fixed;inset:0;background:rgba(16,26,20,.35);
+    opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:40;
+  }
+  .overlay.open{opacity:1;pointer-events:auto;}
+  .drawer{
+    position:fixed;top:0;right:0;height:100vh;width:440px;max-width:92vw;
+    background:#FCFBF6;box-shadow:-16px 0 40px rgba(16,42,32,.18);
+    transform:translateX(100%);transition:transform .3s cubic-bezier(.22,1,.36,1);
+    z-index:50;overflow-y:auto;
+  }
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{
+    padding:24px 24px 18px;border-bottom:1px solid var(--glass-border);
+    display:flex;justify-content:space-between;align-items:flex-start;
+    position:sticky;top:0;background:#FCFBF6;z-index:2;
+  }
+  .drawer-close{
+    width:30px;height:30px;border-radius:8px;border:1px solid var(--glass-border);
+    background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    color:var(--muted);flex-shrink:0;
+  }
+  .drawer-close:hover{background:var(--bg);}
+  .drawer-title{font-size:18px;font-weight:800;line-height:1.3;}
+  .drawer-meta{font-size:12px;color:var(--muted);margin-top:4px;}
+  .drawer-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+  .dtag{font-size:10.5px;padding:3px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--glass-border);color:var(--muted);}
+  .dtag.gold{background:var(--gold-soft);color:var(--gold);border-color:transparent;}
+  .dtag.risk{background:var(--risk-soft);color:var(--risk);border-color:transparent;}
+
+  .drawer-body{padding:20px 24px 40px;}
+  .drawer-section{margin-bottom:22px;}
+  .drawer-section-label{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-weight:600;}
+
+  .gauge-block{display:flex;align-items:center;gap:18px;}
+  .gauge-num{font-size:40px;font-weight:800;line-height:1;}
+  .gauge-of{font-size:14px;color:var(--muted);font-weight:600;}
+  .gauge-grade-chip{
+    display:inline-block;margin-top:6px;font-size:11px;font-weight:700;
+    padding:3px 9px;border-radius:100px;
+  }
+
+  .sub-row{margin-bottom:13px;}
+  .sub-top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;}
+  .sub-name{font-weight:600;}
+  .sub-val{color:var(--muted);font-variant-numeric:tabular-nums;}
+  .sub-track{height:7px;background:#EEEBE0;border-radius:4px;overflow:hidden;}
+  .sub-fill{height:100%;width:0;border-radius:4px;transition:width .8s cubic-bezier(.22,1,.36,1);}
+  .sub-source{font-size:10.5px;color:var(--muted);margin-top:3px;}
+
+  .radar-card-mini{display:flex;justify-content:center;padding:6px 0 2px;}
+
+  .explain-box{
+    background:var(--bg);border-radius:12px;padding:14px 16px;
+    font-size:12.5px;color:var(--muted);line-height:1.6;
+  }
+  .explain-box b{color:var(--ink);}
+
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .compare-box{border-radius:12px;padding:14px;}
+  .compare-box.trad{background:var(--risk-soft);}
+  .compare-box.alt{background:var(--primary-soft);}
+  .compare-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700;margin-bottom:6px;}
+  .compare-box.trad .compare-label{color:var(--risk);}
+  .compare-box.alt .compare-label{color:var(--primary-dark);}
+  .compare-num{font-size:24px;font-weight:800;}
+  .compare-box.trad .compare-num{color:var(--risk);}
+  .compare-box.alt .compare-num{color:var(--primary-dark);}
+  .compare-verdict{font-size:11px;color:var(--muted);margin-top:4px;}
+  .uplift-note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6;}
+
+  .loan-card{
+    background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+    color:#fff;border-radius:14px;padding:18px;
+  }
+  .loan-card-label{font-size:11px;letter-spacing:.05em;text-transform:uppercase;opacity:.85;margin-bottom:8px;}
+  .loan-amount{font-size:24px;font-weight:800;}
+  .loan-terms{font-size:12px;opacity:.92;margin-top:8px;line-height:1.6;}
+  .loan-badge{
+    display:inline-block;margin-top:10px;font-size:10.5px;font-weight:700;
+    background:rgba(255,255,255,.18);padding:3px 9px;border-radius:100px;
+  }
+
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-thumb{background:#D8D3C2;border-radius:4px;}
+
+  @media (max-width:1150px){
+    .charts-row{grid-template-columns:1fr;}
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:760px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{position:relative;height:auto;flex-direction:row;align-items:center;overflow-x:auto;}
+    .nav-section-label,.sidebar-footer{display:none;}
+    .kpi-row{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">MC</div>
+      <div>
+        <div class="brand-name">MSME Smart<br>Credit Engine</div>
+      </div>
+    </div>
+    <div class="nav-section-label">Menu</div>
+    <div class="nav-item active" data-view="overview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      Overview
+    </div>
+    <div class="nav-item" data-view="businesses">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 4v16"/></svg>
+      Businesses
+    </div>
+    <div class="nav-item" data-view="insights">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+      AI Insights
+    </div>
+    <div class="nav-item" data-view="reports">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17V9m6 8V5M3 21h18"/></svg>
+      Reports
+    </div>
+    <div class="nav-item" data-view="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 11-4 0v-.2a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 110-4h.2a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.6V3a2 2 0 114 0v.2a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.6 1H21a2 2 0 110 4h-.2a1.7 1.7 0 00-1.6 1z"/></svg>
+      Settings
+    </div>
+    <div class="sidebar-footer">
+      IDBI Innovate 2026<br>
+      Problem Statement 3 &middot; MSME Financial Health Card
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Portfolio Overview</div>
+        <div class="page-sub">Unified credit health across GST, UPI, Account Aggregator &amp; EPFO signals</div>
+      </div>
+      <div class="topbar-controls">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="searchInput" placeholder="Search business or ID">
+        </div>
+        <select class="filter-select" id="gradeFilter">
+          <option value="all">All grades</option>
+          <option value="A">Grade A</option>
+          <option value="B">Grade B</option>
+          <option value="C">Grade C</option>
+          <option value="D">Grade D</option>
+        </select>
+        <select class="filter-select" id="segmentFilter">
+          <option value="all">All segments</option>
+          <option value="ntc">NTC / NTB only</option>
+          <option value="hero">Hidden-gem examples</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="kpi-row" id="kpiRow"></div>
+
+    <div class="charts-row" id="chartsRow">
+      <div class="panel">
+        <div class="panel-title">Grade Distribution</div>
+        <div class="panel-sub">Across full scored portfolio</div>
+        <div class="donut-wrap" id="donutWrap"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Portfolio Signal Mix</div>
+        <div class="panel-sub">Average score per data source</div>
+        <div class="radar-card-mini" id="radarWrap"></div>
+      </div>
+      <div class="panel insights-panel">
+        <div class="panel-title">AI Insights</div>
+        <div class="panel-sub">Auto-generated from this scoring run</div>
+        <div id="insightsList"></div>
+      </div>
+    </div>
+
+    <div class="list-panel" id="listPanel">
+      <div class="list-header">
+        <div class="panel-title">Businesses</div>
+        <div class="panel-sub" id="resultCount" style="margin-bottom:0"></div>
+      </div>
+      <div class="biz-grid" id="bizGrid"></div>
+    </div>
+
+    <div class="panel" id="reportsPanel" style="display:none;margin-bottom:22px;">
+      <div class="panel-title">Validation Report</div>
+      <div class="panel-sub">Model performance checked against known outcomes in this dataset</div>
+      <div id="reportsContent"></div>
+    </div>
+
+    <div class="panel" id="settingsPanel" style="display:none;margin-bottom:22px;">
+      <div class="panel-title">Scoring Configuration</div>
+      <div class="panel-sub">Weights and thresholds used to compute the Financial Health Score</div>
+      <div id="settingsContent"></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer"></div>
+
+<script>
+const DATA = [{"business_id": "MSME0001", "business_name": "Vishwa Engineering Works", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "69.9", "cash_flow_score": "49.0", "banking_score": "53.9", "stability_score": "55.8", "composite_score": "56.8", "grade": "C", "explanation": "Strongest signal: GST compliance (70/100). Weakest signal: cash flow (UPI) (49/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-3", "business_vintage_years": "4.0", "traditional_score": "69.9"}, {"business_id": "MSME0002", "business_name": "Shree Garments", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "22.2", "cash_flow_score": "33.3", "banking_score": "31.7", "stability_score": "29.1", "composite_score": "29.3", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (33/100). Weakest signal: GST compliance (22/100).", "sector": "Textile & Apparel", "city_tier": "Tier-2", "business_vintage_years": "1.5", "traditional_score": "22.2"}, {"business_id": "MSME0003", "business_name": "New Building Materials", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "12.5", "cash_flow_score": "17.2", "banking_score": "13.2", "stability_score": "4.1", "composite_score": "12.4", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (17/100). Weakest signal: workforce stability (EPFO) (4/100).", "sector": "Construction Materials", "city_tier": "Tier-1", "business_vintage_years": "5.9", "traditional_score": "12.5"}, {"business_id": "MSME0004", "business_name": "Jai Infotech", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Risky", "defaulted_12m": "1", "compliance_score": "19.2", "cash_flow_score": "8.4", "banking_score": "7.5", "stability_score": "23.0", "composite_score": "13.8", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (23/100). Weakest signal: banking behavior (8/100).", "sector": "IT Services", "city_tier": "Tier-3", "business_vintage_years": "5.2", "traditional_score": "19.2"}, {"business_id": "MSME0005", "business_name": "Ananya Roadways", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "86.7", "cash_flow_score": "65.1", "banking_score": "89.1", "stability_score": "80.1", "composite_score": "79.5", "grade": "A", "explanation": "Strongest signal: banking behavior (89/100). Weakest signal: cash flow (UPI) (65/100).", "sector": "Logistics & Transport", "city_tier": "Tier-3", "business_vintage_years": "9.1", "traditional_score": "86.7"}, {"business_id": "MSME0006", "business_name": "Om Auto Parts", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "78.7", "cash_flow_score": "84.5", "banking_score": "80.9", "stability_score": "80.3", "composite_score": "81.3", "grade": "A", "explanation": "Strongest signal: cash flow (UPI) (84/100). Weakest signal: GST compliance (79/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-2", "business_vintage_years": "7.9", "traditional_score": "78.7"}, {"business_id": "MSME0007", "business_name": "Prime Infotech", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "82.8", "cash_flow_score": "73.6", "banking_score": "94.6", "stability_score": "80.3", "composite_score": "82.5", "grade": "A", "explanation": "Strongest signal: banking behavior (95/100). Weakest signal: cash flow (UPI) (74/100).", "sector": "IT Services", "city_tier": "Tier-1", "business_vintage_years": "9.7", "traditional_score": "82.8"}, {"business_id": "MSME0008", "business_name": "Shree Infotech", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "23.8", "cash_flow_score": "30.2", "banking_score": "68.3", "stability_score": "54.1", "composite_score": "42.9", "grade": "D", "explanation": "Strongest signal: banking behavior (68/100). Weakest signal: GST compliance (24/100).", "sector": "IT Services", "city_tier": "Tier-2", "business_vintage_years": "1.2", "traditional_score": "23.8"}, {"business_id": "MSME0009", "business_name": "Guru Sweets & Snacks", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "10.9", "cash_flow_score": "15.6", "banking_score": "16.2", "stability_score": "17.1", "composite_score": "14.9", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (17/100). Weakest signal: GST compliance (11/100).", "sector": "Food & Beverage", "city_tier": "Tier-2", "business_vintage_years": "4.1", "traditional_score": "10.9"}, {"business_id": "MSME0010", "business_name": "Bharat Apparels", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "17.3", "cash_flow_score": "18.3", "banking_score": "5.9", "stability_score": "9.9", "composite_score": "13.2", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (18/100). Weakest signal: banking behavior (6/100).", "sector": "Textile & Apparel", "city_tier": "Tier-1", "business_vintage_years": "7.1", "traditional_score": "17.3"}, {"business_id": "MSME0011", "business_name": "Shree Agro Co", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "91.7", "cash_flow_score": "75.1", "banking_score": "73.0", "stability_score": "75.0", "composite_score": "78.7", "grade": "A", "explanation": "Strongest signal: GST compliance (92/100). Weakest signal: banking behavior (73/100).", "sector": "Agri-Trading", "city_tier": "Tier-1", "business_vintage_years": "7.6", "traditional_score": "91.7"}, {"business_id": "MSME0012", "business_name": "Guru Roadways", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "39.4", "cash_flow_score": "44.9", "banking_score": "57.4", "stability_score": "52.7", "composite_score": "48.2", "grade": "C", "explanation": "Strongest signal: banking behavior (57/100). Weakest signal: GST compliance (39/100).", "sector": "Logistics & Transport", "city_tier": "Tier-1", "business_vintage_years": "1.1", "traditional_score": "39.4"}, {"business_id": "MSME0013", "business_name": "Prime Transport Co", "is_ntc_ntb": "True", "vintage_cohort": "growing", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "32.6", "cash_flow_score": "55.2", "banking_score": "44.3", "stability_score": "56.0", "composite_score": "47.0", "grade": "C", "explanation": "Strongest signal: workforce stability (EPFO) (56/100). Weakest signal: GST compliance (33/100).", "sector": "Logistics & Transport", "city_tier": "Tier-2", "business_vintage_years": "4.9", "traditional_score": "32.6"}, {"business_id": "MSME0014", "business_name": "Classic Stores", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "62.5", "cash_flow_score": "55.0", "banking_score": "44.2", "stability_score": "31.9", "composite_score": "49.6", "grade": "C", "explanation": "Strongest signal: GST compliance (63/100). Weakest signal: workforce stability (EPFO) (32/100).", "sector": "Retail Trade", "city_tier": "Tier-2", "business_vintage_years": "4.1", "traditional_score": "62.5"}, {"business_id": "MSME0015", "business_name": "Royal Auto Works", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "70.8", "cash_flow_score": "89.8", "banking_score": "67.6", "stability_score": "69.8", "composite_score": "75.5", "grade": "A", "explanation": "Strongest signal: cash flow (UPI) (90/100). Weakest signal: banking behavior (68/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-3", "business_vintage_years": "6.8", "traditional_score": "70.8"}, {"business_id": "MSME0016", "business_name": "Golden General Store", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "71.4", "cash_flow_score": "73.4", "banking_score": "84.4", "stability_score": "80.8", "composite_score": "77.1", "grade": "A", "explanation": "Strongest signal: banking behavior (84/100). Weakest signal: GST compliance (71/100).", "sector": "Retail Trade", "city_tier": "Tier-2", "business_vintage_years": "7.8", "traditional_score": "71.4"}, {"business_id": "MSME0017", "business_name": "Vijay Softwares", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "55.5", "cash_flow_score": "45.3", "banking_score": "47.1", "stability_score": "53.4", "composite_score": "49.9", "grade": "C", "explanation": "Strongest signal: GST compliance (56/100). Weakest signal: cash flow (UPI) (45/100).", "sector": "IT Services", "city_tier": "Tier-2", "business_vintage_years": "6.8", "traditional_score": "55.5"}, {"business_id": "MSME0018", "business_name": "National Garments", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "59.2", "cash_flow_score": "48.3", "banking_score": "40.5", "stability_score": "72.9", "composite_score": "54.0", "grade": "C", "explanation": "Strongest signal: workforce stability (EPFO) (73/100). Weakest signal: banking behavior (40/100).", "sector": "Textile & Apparel", "city_tier": "Tier-2", "business_vintage_years": "5.8", "traditional_score": "59.2"}, {"business_id": "MSME0019", "business_name": "Jai Sweets & Snacks", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "59.0", "cash_flow_score": "80.4", "banking_score": "45.2", "stability_score": "50.2", "composite_score": "60.2", "grade": "B", "explanation": "Strongest signal: cash flow (UPI) (80/100). Weakest signal: banking behavior (45/100).", "sector": "Food & Beverage", "city_tier": "Tier-1", "business_vintage_years": "4.8", "traditional_score": "59.0"}, {"business_id": "MSME0020", "business_name": "Golden Carriers", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "40.4", "cash_flow_score": "49.9", "banking_score": "42.6", "stability_score": "43.0", "composite_score": "44.3", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (50/100). Weakest signal: GST compliance (40/100).", "sector": "Logistics & Transport", "city_tier": "Tier-1", "business_vintage_years": "5.4", "traditional_score": "40.4"}, {"business_id": "MSME0021", "business_name": "Sai Textiles", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "1", "compliance_score": "33.1", "cash_flow_score": "20.0", "banking_score": "8.7", "stability_score": "16.2", "composite_score": "19.7", "grade": "D", "explanation": "Strongest signal: GST compliance (33/100). Weakest signal: banking behavior (9/100).", "sector": "Textile & Apparel", "city_tier": "Tier-2", "business_vintage_years": "3.3", "traditional_score": "33.1"}, {"business_id": "MSME0022", "business_name": "Modern Pharma", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "76.0", "cash_flow_score": "79.1", "banking_score": "82.9", "stability_score": "83.8", "composite_score": "80.2", "grade": "A", "explanation": "Strongest signal: workforce stability (EPFO) (84/100). Weakest signal: GST compliance (76/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-3", "business_vintage_years": "7.6", "traditional_score": "76.0"}, {"business_id": "MSME0023", "business_name": "United Retail Co", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "49.6", "cash_flow_score": "45.9", "banking_score": "41.1", "stability_score": "54.1", "composite_score": "47.2", "grade": "C", "explanation": "Strongest signal: workforce stability (EPFO) (54/100). Weakest signal: banking behavior (41/100).", "sector": "Retail Trade", "city_tier": "Tier-2", "business_vintage_years": "6.1", "traditional_score": "49.6"}, {"business_id": "MSME0024", "business_name": "Krishna Garments", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "73.1", "cash_flow_score": "41.8", "banking_score": "65.6", "stability_score": "48.1", "composite_score": "56.9", "grade": "C", "explanation": "Strongest signal: GST compliance (73/100). Weakest signal: cash flow (UPI) (42/100).", "sector": "Textile & Apparel", "city_tier": "Tier-1", "business_vintage_years": "4.9", "traditional_score": "73.1"}, {"business_id": "MSME0025", "business_name": "Silver Textiles", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "46.7", "cash_flow_score": "45.0", "banking_score": "37.2", "stability_score": "61.9", "composite_score": "46.8", "grade": "C", "explanation": "Strongest signal: workforce stability (EPFO) (62/100). Weakest signal: banking behavior (37/100).", "sector": "Textile & Apparel", "city_tier": "Tier-2", "business_vintage_years": "6.9", "traditional_score": "46.7"}, {"business_id": "MSME0026", "business_name": "Star Farm Fresh", "is_ntc_ntb": "True", "vintage_cohort": "growing", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "63.0", "cash_flow_score": "58.7", "banking_score": "30.9", "stability_score": "37.2", "composite_score": "48.5", "grade": "C", "explanation": "Strongest signal: GST compliance (63/100). Weakest signal: banking behavior (31/100).", "sector": "Agri-Trading", "city_tier": "Tier-1", "business_vintage_years": "2.8", "traditional_score": "63.0"}, {"business_id": "MSME0027", "business_name": "Ganesh Infotech", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "81.0", "cash_flow_score": "71.3", "banking_score": "73.7", "stability_score": "65.6", "composite_score": "73.2", "grade": "B", "explanation": "Strongest signal: GST compliance (81/100). Weakest signal: workforce stability (EPFO) (66/100).", "sector": "IT Services", "city_tier": "Tier-3", "business_vintage_years": "10.7", "traditional_score": "81.0"}, {"business_id": "MSME0028", "business_name": "Modern Engineering Works", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "63.8", "cash_flow_score": "60.9", "banking_score": "61.2", "stability_score": "60.3", "composite_score": "61.6", "grade": "B", "explanation": "Strongest signal: GST compliance (64/100). Weakest signal: workforce stability (EPFO) (60/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-1", "business_vintage_years": "4.3", "traditional_score": "63.8"}, {"business_id": "MSME0029", "business_name": "Ganesh Medicos", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "34.7", "cash_flow_score": "31.0", "banking_score": "16.5", "stability_score": "33.4", "composite_score": "28.8", "grade": "D", "explanation": "Strongest signal: GST compliance (35/100). Weakest signal: banking behavior (16/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-1", "business_vintage_years": "3.7", "traditional_score": "34.7"}, {"business_id": "MSME0030", "business_name": "Metro Stores", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "53.5", "cash_flow_score": "66.7", "banking_score": "81.8", "stability_score": "82.7", "composite_score": "70.4", "grade": "B", "explanation": "Strongest signal: workforce stability (EPFO) (83/100). Weakest signal: GST compliance (54/100).", "sector": "Retail Trade", "city_tier": "Tier-1", "business_vintage_years": "10.7", "traditional_score": "53.5"}, {"business_id": "MSME0031", "business_name": "Global Retail Co", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "1", "compliance_score": "25.1", "cash_flow_score": "34.3", "banking_score": "27.5", "stability_score": "11.6", "composite_score": "25.7", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (34/100). Weakest signal: workforce stability (EPFO) (12/100).", "sector": "Retail Trade", "city_tier": "Tier-2", "business_vintage_years": "3.9", "traditional_score": "25.1"}, {"business_id": "MSME0032", "business_name": "Laxmi Systems", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "88.5", "cash_flow_score": "59.3", "banking_score": "69.3", "stability_score": "86.5", "composite_score": "74.5", "grade": "B", "explanation": "Strongest signal: GST compliance (88/100). Weakest signal: cash flow (UPI) (59/100).", "sector": "IT Services", "city_tier": "Tier-1", "business_vintage_years": "8.5", "traditional_score": "88.5"}, {"business_id": "MSME0033", "business_name": "Vijay Pharma", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "77.4", "cash_flow_score": "87.0", "banking_score": "74.4", "stability_score": "86.2", "composite_score": "81.3", "grade": "A", "explanation": "Strongest signal: cash flow (UPI) (87/100). Weakest signal: banking behavior (74/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-3", "business_vintage_years": "7.8", "traditional_score": "77.4"}, {"business_id": "MSME0034", "business_name": "Shri Systems", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "34.9", "cash_flow_score": "39.2", "banking_score": "35.4", "stability_score": "37.9", "composite_score": "36.9", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (39/100). Weakest signal: GST compliance (35/100).", "sector": "IT Services", "city_tier": "Tier-2", "business_vintage_years": "1.8", "traditional_score": "34.9"}, {"business_id": "MSME0035", "business_name": "Golden Garments", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "33.3", "cash_flow_score": "61.5", "banking_score": "41.6", "stability_score": "39.9", "composite_score": "45.1", "grade": "C", "explanation": "Strongest signal: cash flow (UPI) (61/100). Weakest signal: GST compliance (33/100).", "sector": "Textile & Apparel", "city_tier": "Tier-3", "business_vintage_years": "0.2", "traditional_score": "33.3"}, {"business_id": "MSME0036", "business_name": "Om Fabrics", "is_ntc_ntb": "True", "vintage_cohort": "growing", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "29.6", "cash_flow_score": "40.3", "banking_score": "51.6", "stability_score": "32.3", "composite_score": "38.9", "grade": "D", "explanation": "Strongest signal: banking behavior (52/100). Weakest signal: GST compliance (30/100).", "sector": "Textile & Apparel", "city_tier": "Tier-3", "business_vintage_years": "3.3", "traditional_score": "29.6"}, {"business_id": "MSME0037", "business_name": "Global Logistics", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "47.3", "cash_flow_score": "50.0", "banking_score": "65.8", "stability_score": "38.4", "composite_score": "50.9", "grade": "C", "explanation": "Strongest signal: banking behavior (66/100). Weakest signal: workforce stability (EPFO) (38/100).", "sector": "Logistics & Transport", "city_tier": "Tier-1", "business_vintage_years": "5.9", "traditional_score": "47.3"}, {"business_id": "MSME0038", "business_name": "Modern Medicos", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "86.5", "cash_flow_score": "64.1", "banking_score": "75.2", "stability_score": "69.4", "composite_score": "73.6", "grade": "B", "explanation": "Strongest signal: GST compliance (87/100). Weakest signal: cash flow (UPI) (64/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-1", "business_vintage_years": "12.4", "traditional_score": "86.5"}, {"business_id": "MSME0039", "business_name": "Classic Medicos", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "25.6", "cash_flow_score": "6.7", "banking_score": "21.5", "stability_score": "15.0", "composite_score": "16.8", "grade": "D", "explanation": "Strongest signal: GST compliance (26/100). Weakest signal: cash flow (UPI) (7/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-1", "business_vintage_years": "2.6", "traditional_score": "25.6"}, {"business_id": "MSME0040", "business_name": "Maa Medicos", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "1", "compliance_score": "46.4", "cash_flow_score": "21.9", "banking_score": "48.3", "stability_score": "46.7", "composite_score": "39.6", "grade": "D", "explanation": "Strongest signal: banking behavior (48/100). Weakest signal: cash flow (UPI) (22/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-2", "business_vintage_years": "5.5", "traditional_score": "46.4"}, {"business_id": "MSME0041", "business_name": "United Agro Industries", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "86.2", "cash_flow_score": "64.2", "banking_score": "82.4", "stability_score": "63.8", "composite_score": "74.1", "grade": "B", "explanation": "Strongest signal: GST compliance (86/100). Weakest signal: workforce stability (EPFO) (64/100).", "sector": "Agri-Trading", "city_tier": "Tier-2", "business_vintage_years": "8.9", "traditional_score": "86.2"}, {"business_id": "MSME0042", "business_name": "Ananya Retail Co", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "50.8", "cash_flow_score": "38.7", "banking_score": "36.0", "stability_score": "44.8", "composite_score": "42.3", "grade": "D", "explanation": "Strongest signal: GST compliance (51/100). Weakest signal: banking behavior (36/100).", "sector": "Retail Trade", "city_tier": "Tier-1", "business_vintage_years": "6.4", "traditional_score": "50.8"}, {"business_id": "MSME0043", "business_name": "Vijay Agro Traders", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "1", "compliance_score": "86.4", "cash_flow_score": "69.1", "banking_score": "83.3", "stability_score": "77.4", "composite_score": "78.6", "grade": "A", "explanation": "Strongest signal: GST compliance (86/100). Weakest signal: cash flow (UPI) (69/100).", "sector": "Agri-Trading", "city_tier": "Tier-1", "business_vintage_years": "6.7", "traditional_score": "86.4"}, {"business_id": "MSME0044", "business_name": "Krishna Transport Co", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "45.5", "cash_flow_score": "36.2", "banking_score": "33.9", "stability_score": "32.1", "composite_score": "37.2", "grade": "D", "explanation": "Strongest signal: GST compliance (46/100). Weakest signal: workforce stability (EPFO) (32/100).", "sector": "Logistics & Transport", "city_tier": "Tier-2", "business_vintage_years": "1.2", "traditional_score": "45.5"}, {"business_id": "MSME0045", "business_name": "Ganesh Transport Co", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "1", "compliance_score": "56.8", "cash_flow_score": "69.3", "banking_score": "68.9", "stability_score": "56.9", "composite_score": "63.6", "grade": "B", "explanation": "Strongest signal: cash flow (UPI) (69/100). Weakest signal: GST compliance (57/100).", "sector": "Logistics & Transport", "city_tier": "Tier-1", "business_vintage_years": "4.7", "traditional_score": "56.8"}, {"business_id": "MSME0046", "business_name": "Maa Life Sciences", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "1", "compliance_score": "23.1", "cash_flow_score": "27.4", "banking_score": "11.6", "stability_score": "9.6", "composite_score": "18.8", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (27/100). Weakest signal: workforce stability (EPFO) (10/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-2", "business_vintage_years": "2.4", "traditional_score": "23.1"}, {"business_id": "MSME0047", "business_name": "Vishwa Wellness", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "47.7", "cash_flow_score": "69.7", "banking_score": "55.4", "stability_score": "67.1", "composite_score": "60.1", "grade": "B", "explanation": "Strongest signal: cash flow (UPI) (70/100). Weakest signal: GST compliance (48/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-2", "business_vintage_years": "2.1", "traditional_score": "47.7"}, {"business_id": "MSME0048", "business_name": "New Bakers", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "56.9", "cash_flow_score": "48.3", "banking_score": "64.0", "stability_score": "53.7", "composite_score": "55.4", "grade": "C", "explanation": "Strongest signal: banking behavior (64/100). Weakest signal: cash flow (UPI) (48/100).", "sector": "Food & Beverage", "city_tier": "Tier-1", "business_vintage_years": "3.8", "traditional_score": "56.9"}, {"business_id": "MSME0049", "business_name": "Metro Constructions", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "1", "compliance_score": "57.7", "cash_flow_score": "19.5", "banking_score": "45.3", "stability_score": "46.0", "composite_score": "40.8", "grade": "D", "explanation": "Strongest signal: GST compliance (58/100). Weakest signal: cash flow (UPI) (19/100).", "sector": "Construction Materials", "city_tier": "Tier-2", "business_vintage_years": "5.7", "traditional_score": "57.7"}, {"business_id": "MSME0050", "business_name": "New Auto Works", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "81.6", "cash_flow_score": "84.5", "banking_score": "84.6", "stability_score": "89.7", "composite_score": "84.8", "grade": "A", "explanation": "Strongest signal: workforce stability (EPFO) (90/100). Weakest signal: GST compliance (82/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-2", "business_vintage_years": "6.9", "traditional_score": "81.6"}, {"business_id": "MSME0051", "business_name": "Silver Auto Care", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "14.6", "cash_flow_score": "50.9", "banking_score": "48.0", "stability_score": "37.9", "composite_score": "38.5", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (51/100). Weakest signal: GST compliance (15/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-2", "business_vintage_years": "0.9", "traditional_score": "14.6"}, {"business_id": "MSME0052", "business_name": "Modern Cement Co", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "24.9", "cash_flow_score": "39.0", "banking_score": "18.4", "stability_score": "26.5", "composite_score": "27.8", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (39/100). Weakest signal: banking behavior (18/100).", "sector": "Construction Materials", "city_tier": "Tier-2", "business_vintage_years": "1.4", "traditional_score": "24.9"}, {"business_id": "MSME0053", "business_name": "Om Agro Industries", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "19.1", "cash_flow_score": "40.6", "banking_score": "34.0", "stability_score": "32.7", "composite_score": "32.0", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (41/100). Weakest signal: GST compliance (19/100).", "sector": "Agri-Trading", "city_tier": "Tier-2", "business_vintage_years": "0.1", "traditional_score": "19.1"}, {"business_id": "MSME0054", "business_name": "Laxmi Bakers", "is_ntc_ntb": "True", "vintage_cohort": "established", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "31.9", "cash_flow_score": "28.5", "banking_score": "23.7", "stability_score": "35.5", "composite_score": "29.5", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (36/100). Weakest signal: banking behavior (24/100).", "sector": "Food & Beverage", "city_tier": "Tier-3", "business_vintage_years": "5.2", "traditional_score": "31.9"}, {"business_id": "MSME0055", "business_name": "Guru Mart", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "21.4", "cash_flow_score": "11.5", "banking_score": "21.5", "stability_score": "14.0", "composite_score": "17.0", "grade": "D", "explanation": "Strongest signal: banking behavior (22/100). Weakest signal: cash flow (UPI) (12/100).", "sector": "Retail Trade", "city_tier": "Tier-3", "business_vintage_years": "5.0", "traditional_score": "21.4"}, {"business_id": "MSME0056", "business_name": "Modern Garage", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "37.6", "cash_flow_score": "44.7", "banking_score": "40.5", "stability_score": "15.4", "composite_score": "36.0", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (45/100). Weakest signal: workforce stability (EPFO) (15/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-1", "business_vintage_years": "0.6", "traditional_score": "37.6"}, {"business_id": "MSME0057", "business_name": "Jai Carriers", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "73.7", "cash_flow_score": "82.2", "banking_score": "79.6", "stability_score": "71.8", "composite_score": "77.3", "grade": "A", "explanation": "Strongest signal: cash flow (UPI) (82/100). Weakest signal: workforce stability (EPFO) (72/100).", "sector": "Logistics & Transport", "city_tier": "Tier-3", "business_vintage_years": "6.8", "traditional_score": "73.7"}, {"business_id": "MSME0058", "business_name": "Jai Fabrics", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "71.9", "cash_flow_score": "68.3", "banking_score": "95.2", "stability_score": "73.3", "composite_score": "76.9", "grade": "A", "explanation": "Strongest signal: banking behavior (95/100). Weakest signal: cash flow (UPI) (68/100).", "sector": "Textile & Apparel", "city_tier": "Tier-1", "business_vintage_years": "5.6", "traditional_score": "71.9"}, {"business_id": "MSME0059", "business_name": "Star Roadways", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "77.9", "cash_flow_score": "54.5", "banking_score": "84.0", "stability_score": "78.4", "composite_score": "72.5", "grade": "B", "explanation": "Strongest signal: banking behavior (84/100). Weakest signal: cash flow (UPI) (55/100).", "sector": "Logistics & Transport", "city_tier": "Tier-3", "business_vintage_years": "5.3", "traditional_score": "77.9"}, {"business_id": "MSME0060", "business_name": "Star Wellness", "is_ntc_ntb": "False", "vintage_cohort": "new", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "51.2", "cash_flow_score": "55.4", "banking_score": "35.9", "stability_score": "68.3", "composite_score": "52.0", "grade": "C", "explanation": "Strongest signal: workforce stability (EPFO) (68/100). Weakest signal: banking behavior (36/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-3", "business_vintage_years": "1.8", "traditional_score": "51.2"}, {"business_id": "MSME0061", "business_name": "Prime Digital Solutions", "is_ntc_ntb": "False", "vintage_cohort": "new", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "57.3", "cash_flow_score": "60.6", "banking_score": "34.2", "stability_score": "77.0", "composite_score": "56.4", "grade": "C", "explanation": "Strongest signal: workforce stability (EPFO) (77/100). Weakest signal: banking behavior (34/100).", "sector": "IT Services", "city_tier": "Tier-2", "business_vintage_years": "1.6", "traditional_score": "57.3"}, {"business_id": "MSME0062", "business_name": "Modern Technologies", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "1", "compliance_score": "45.2", "cash_flow_score": "43.8", "banking_score": "35.7", "stability_score": "36.7", "composite_score": "40.7", "grade": "D", "explanation": "Strongest signal: GST compliance (45/100). Weakest signal: banking behavior (36/100).", "sector": "IT Services", "city_tier": "Tier-1", "business_vintage_years": "3.0", "traditional_score": "45.2"}, {"business_id": "MSME0063", "business_name": "New Healthcare", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "42.1", "cash_flow_score": "52.8", "banking_score": "40.5", "stability_score": "31.9", "composite_score": "42.9", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (53/100). Weakest signal: workforce stability (EPFO) (32/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-3", "business_vintage_years": "0.1", "traditional_score": "42.1"}, {"business_id": "MSME0064", "business_name": "Bharat Infra Products", "is_ntc_ntb": "False", "vintage_cohort": "new", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "61.9", "cash_flow_score": "49.8", "banking_score": "30.3", "stability_score": "49.4", "composite_score": "47.8", "grade": "C", "explanation": "Strongest signal: GST compliance (62/100). Weakest signal: banking behavior (30/100).", "sector": "Construction Materials", "city_tier": "Tier-3", "business_vintage_years": "1.3", "traditional_score": "61.9"}, {"business_id": "MSME0065", "business_name": "Om Foods", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "1", "compliance_score": "48.5", "cash_flow_score": "47.2", "banking_score": "71.7", "stability_score": "56.3", "composite_score": "55.5", "grade": "C", "explanation": "Strongest signal: banking behavior (72/100). Weakest signal: cash flow (UPI) (47/100).", "sector": "Food & Beverage", "city_tier": "Tier-1", "business_vintage_years": "3.9", "traditional_score": "48.5"}, {"business_id": "MSME0066", "business_name": "Global Foods", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "39.3", "cash_flow_score": "29.5", "banking_score": "63.4", "stability_score": "47.9", "composite_score": "44.1", "grade": "D", "explanation": "Strongest signal: banking behavior (63/100). Weakest signal: cash flow (UPI) (29/100).", "sector": "Food & Beverage", "city_tier": "Tier-2", "business_vintage_years": "5.6", "traditional_score": "39.3"}, {"business_id": "MSME0067", "business_name": "Jai Motors", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "80.5", "cash_flow_score": "67.9", "banking_score": "92.3", "stability_score": "74.6", "composite_score": "78.5", "grade": "A", "explanation": "Strongest signal: banking behavior (92/100). Weakest signal: cash flow (UPI) (68/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-3", "business_vintage_years": "9.9", "traditional_score": "80.5"}, {"business_id": "MSME0068", "business_name": "Silver Beverages", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "19.2", "cash_flow_score": "24.3", "banking_score": "48.7", "stability_score": "33.2", "composite_score": "30.9", "grade": "D", "explanation": "Strongest signal: banking behavior (49/100). Weakest signal: GST compliance (19/100).", "sector": "Food & Beverage", "city_tier": "Tier-2", "business_vintage_years": "0.1", "traditional_score": "19.2"}, {"business_id": "MSME0069", "business_name": "Krishna Traders", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "78.3", "cash_flow_score": "69.6", "banking_score": "70.7", "stability_score": "69.8", "composite_score": "72.1", "grade": "B", "explanation": "Strongest signal: GST compliance (78/100). Weakest signal: cash flow (UPI) (70/100).", "sector": "Retail Trade", "city_tier": "Tier-2", "business_vintage_years": "11.1", "traditional_score": "78.3"}, {"business_id": "MSME0070", "business_name": "Modern Life Sciences", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "28.9", "cash_flow_score": "47.1", "banking_score": "42.1", "stability_score": "29.3", "composite_score": "37.7", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (47/100). Weakest signal: GST compliance (29/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-3", "business_vintage_years": "1.9", "traditional_score": "28.9"}, {"business_id": "MSME0071", "business_name": "Krishna Infra Products", "is_ntc_ntb": "True", "vintage_cohort": "growing", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "14.0", "cash_flow_score": "36.8", "banking_score": "46.9", "stability_score": "41.0", "composite_score": "34.5", "grade": "D", "explanation": "Strongest signal: banking behavior (47/100). Weakest signal: GST compliance (14/100).", "sector": "Construction Materials", "city_tier": "Tier-1", "business_vintage_years": "3.9", "traditional_score": "14.0"}, {"business_id": "MSME0072", "business_name": "Bharat Auto Care", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "91.3", "cash_flow_score": "66.0", "banking_score": "92.1", "stability_score": "67.2", "composite_score": "79.1", "grade": "A", "explanation": "Strongest signal: banking behavior (92/100). Weakest signal: cash flow (UPI) (66/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-3", "business_vintage_years": "8.7", "traditional_score": "91.3"}, {"business_id": "MSME0073", "business_name": "Ganesh Logistics", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "76.3", "cash_flow_score": "77.7", "banking_score": "67.8", "stability_score": "67.8", "composite_score": "72.9", "grade": "B", "explanation": "Strongest signal: cash flow (UPI) (78/100). Weakest signal: banking behavior (68/100).", "sector": "Logistics & Transport", "city_tier": "Tier-1", "business_vintage_years": "6.3", "traditional_score": "76.3"}, {"business_id": "MSME0074", "business_name": "Ananya Infotech", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "45.5", "cash_flow_score": "41.0", "banking_score": "41.8", "stability_score": "24.8", "composite_score": "39.1", "grade": "D", "explanation": "Strongest signal: GST compliance (45/100). Weakest signal: workforce stability (EPFO) (25/100).", "sector": "IT Services", "city_tier": "Tier-1", "business_vintage_years": "0.9", "traditional_score": "45.5"}, {"business_id": "MSME0075", "business_name": "Ananya Apparels", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "1", "compliance_score": "37.2", "cash_flow_score": "23.3", "banking_score": "5.1", "stability_score": "20.7", "composite_score": "21.7", "grade": "D", "explanation": "Strongest signal: GST compliance (37/100). Weakest signal: banking behavior (5/100).", "sector": "Textile & Apparel", "city_tier": "Tier-2", "business_vintage_years": "4.2", "traditional_score": "37.2"}, {"business_id": "MSME0076", "business_name": "Golden Auto Care", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Risky", "defaulted_12m": "1", "compliance_score": "13.0", "cash_flow_score": "5.9", "banking_score": "10.5", "stability_score": "20.0", "composite_score": "11.6", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (20/100). Weakest signal: cash flow (UPI) (6/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-3", "business_vintage_years": "7.7", "traditional_score": "13.0"}, {"business_id": "MSME0077", "business_name": "Golden Cement Co", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "20.2", "cash_flow_score": "52.5", "banking_score": "42.0", "stability_score": "48.8", "composite_score": "41.1", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (53/100). Weakest signal: GST compliance (20/100).", "sector": "Construction Materials", "city_tier": "Tier-3", "business_vintage_years": "0.2", "traditional_score": "20.2"}, {"business_id": "MSME0078", "business_name": "Sai Manufacturing Co", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "86.0", "cash_flow_score": "81.8", "banking_score": "85.8", "stability_score": "81.4", "composite_score": "83.8", "grade": "A", "explanation": "Strongest signal: GST compliance (86/100). Weakest signal: workforce stability (EPFO) (81/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-2", "business_vintage_years": "6.6", "traditional_score": "86.0"}, {"business_id": "MSME0079", "business_name": "Prime Systems", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "54.2", "cash_flow_score": "45.7", "banking_score": "63.6", "stability_score": "50.8", "composite_score": "53.3", "grade": "C", "explanation": "Strongest signal: banking behavior (64/100). Weakest signal: cash flow (UPI) (46/100).", "sector": "IT Services", "city_tier": "Tier-2", "business_vintage_years": "3.6", "traditional_score": "54.2"}, {"business_id": "MSME0080", "business_name": "Classic Agro Traders", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "1", "compliance_score": "87.7", "cash_flow_score": "65.0", "banking_score": "78.2", "stability_score": "65.2", "composite_score": "74.0", "grade": "B", "explanation": "Strongest signal: GST compliance (88/100). Weakest signal: cash flow (UPI) (65/100).", "sector": "Agri-Trading", "city_tier": "Tier-2", "business_vintage_years": "5.5", "traditional_score": "87.7"}, {"business_id": "MSME0081", "business_name": "Star Carriers", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "15.9", "cash_flow_score": "46.1", "banking_score": "16.1", "stability_score": "26.9", "composite_score": "27.2", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (46/100). Weakest signal: GST compliance (16/100).", "sector": "Logistics & Transport", "city_tier": "Tier-2", "business_vintage_years": "1.3", "traditional_score": "15.9"}, {"business_id": "MSME0082", "business_name": "Bharat Healthcare", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "23.9", "cash_flow_score": "19.6", "banking_score": "16.9", "stability_score": "8.4", "composite_score": "17.7", "grade": "D", "explanation": "Strongest signal: GST compliance (24/100). Weakest signal: workforce stability (EPFO) (8/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-2", "business_vintage_years": "2.1", "traditional_score": "23.9"}, {"business_id": "MSME0083", "business_name": "Bharat Foods", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "54.6", "cash_flow_score": "62.6", "banking_score": "33.2", "stability_score": "52.3", "composite_score": "51.2", "grade": "C", "explanation": "Strongest signal: cash flow (UPI) (63/100). Weakest signal: banking behavior (33/100).", "sector": "Food & Beverage", "city_tier": "Tier-1", "business_vintage_years": "7.3", "traditional_score": "54.6"}, {"business_id": "MSME0084", "business_name": "Global Technologies", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "76.0", "cash_flow_score": "72.6", "banking_score": "68.9", "stability_score": "73.5", "composite_score": "72.7", "grade": "B", "explanation": "Strongest signal: GST compliance (76/100). Weakest signal: banking behavior (69/100).", "sector": "IT Services", "city_tier": "Tier-1", "business_vintage_years": "10.6", "traditional_score": "76.0"}, {"business_id": "MSME0085", "business_name": "Metro Builders", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "52.5", "cash_flow_score": "41.4", "banking_score": "48.0", "stability_score": "32.7", "composite_score": "44.1", "grade": "D", "explanation": "Strongest signal: GST compliance (52/100). Weakest signal: workforce stability (EPFO) (33/100).", "sector": "Construction Materials", "city_tier": "Tier-1", "business_vintage_years": "6.3", "traditional_score": "52.5"}, {"business_id": "MSME0086", "business_name": "Krishna Industries", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "70.3", "cash_flow_score": "43.2", "banking_score": "69.9", "stability_score": "63.9", "composite_score": "60.8", "grade": "B", "explanation": "Strongest signal: GST compliance (70/100). Weakest signal: cash flow (UPI) (43/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-1", "business_vintage_years": "3.1", "traditional_score": "70.3"}, {"business_id": "MSME0087", "business_name": "Jai Agri Exports", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "19.5", "cash_flow_score": "12.3", "banking_score": "11.3", "stability_score": "28.5", "composite_score": "17.1", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (29/100). Weakest signal: banking behavior (11/100).", "sector": "Agri-Trading", "city_tier": "Tier-1", "business_vintage_years": "2.8", "traditional_score": "19.5"}, {"business_id": "MSME0088", "business_name": "Golden Agro Industries", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "1", "compliance_score": "25.9", "cash_flow_score": "11.0", "banking_score": "21.3", "stability_score": "23.0", "composite_score": "19.7", "grade": "D", "explanation": "Strongest signal: GST compliance (26/100). Weakest signal: cash flow (UPI) (11/100).", "sector": "Agri-Trading", "city_tier": "Tier-1", "business_vintage_years": "2.7", "traditional_score": "25.9"}, {"business_id": "MSME0089", "business_name": "Ganesh Stores", "is_ntc_ntb": "True", "vintage_cohort": "growing", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "34.2", "cash_flow_score": "36.2", "banking_score": "27.3", "stability_score": "20.5", "composite_score": "30.3", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (36/100). Weakest signal: workforce stability (EPFO) (20/100).", "sector": "Retail Trade", "city_tier": "Tier-2", "business_vintage_years": "2.2", "traditional_score": "34.2"}, {"business_id": "MSME0090", "business_name": "Shree Builders", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "1", "compliance_score": "63.0", "cash_flow_score": "20.5", "banking_score": "25.3", "stability_score": "40.0", "composite_score": "36.2", "grade": "D", "explanation": "Strongest signal: GST compliance (63/100). Weakest signal: cash flow (UPI) (21/100).", "sector": "Construction Materials", "city_tier": "Tier-3", "business_vintage_years": "5.3", "traditional_score": "63.0"}, {"business_id": "MSME0091", "business_name": "National Life Sciences", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "63.3", "cash_flow_score": "82.1", "banking_score": "89.6", "stability_score": "74.3", "composite_score": "77.7", "grade": "A", "explanation": "Strongest signal: banking behavior (90/100). Weakest signal: GST compliance (63/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-3", "business_vintage_years": "6.2", "traditional_score": "63.3"}, {"business_id": "MSME0092", "business_name": "United Technologies", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "30.4", "cash_flow_score": "5.6", "banking_score": "6.2", "stability_score": "20.4", "composite_score": "14.9", "grade": "D", "explanation": "Strongest signal: GST compliance (30/100). Weakest signal: cash flow (UPI) (6/100).", "sector": "IT Services", "city_tier": "Tier-3", "business_vintage_years": "9.4", "traditional_score": "30.4"}, {"business_id": "MSME0093", "business_name": "New Constructions", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "17.0", "cash_flow_score": "49.5", "banking_score": "32.1", "stability_score": "26.6", "composite_score": "32.4", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (49/100). Weakest signal: GST compliance (17/100).", "sector": "Construction Materials", "city_tier": "Tier-1", "business_vintage_years": "1.1", "traditional_score": "17.0"}, {"business_id": "MSME0094", "business_name": "New Wellness", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "29.4", "cash_flow_score": "33.3", "banking_score": "6.7", "stability_score": "31.3", "composite_score": "25.3", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (33/100). Weakest signal: banking behavior (7/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-3", "business_vintage_years": "2.4", "traditional_score": "29.4"}, {"business_id": "MSME0095", "business_name": "Om Engineering Works", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "43.3", "cash_flow_score": "34.1", "banking_score": "37.0", "stability_score": "39.1", "composite_score": "38.1", "grade": "D", "explanation": "Strongest signal: GST compliance (43/100). Weakest signal: cash flow (UPI) (34/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-1", "business_vintage_years": "0.1", "traditional_score": "43.3"}, {"business_id": "MSME0096", "business_name": "Star Weavers", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "48.4", "cash_flow_score": "67.5", "banking_score": "57.3", "stability_score": "52.5", "composite_score": "57.2", "grade": "C", "explanation": "Strongest signal: cash flow (UPI) (67/100). Weakest signal: GST compliance (48/100).", "sector": "Textile & Apparel", "city_tier": "Tier-1", "business_vintage_years": "2.5", "traditional_score": "48.4"}, {"business_id": "MSME0097", "business_name": "Metro Agro Traders", "is_ntc_ntb": "False", "vintage_cohort": "new", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "46.3", "cash_flow_score": "66.7", "banking_score": "60.1", "stability_score": "53.2", "composite_score": "57.2", "grade": "C", "explanation": "Strongest signal: cash flow (UPI) (67/100). Weakest signal: GST compliance (46/100).", "sector": "Agri-Trading", "city_tier": "Tier-3", "business_vintage_years": "0.8", "traditional_score": "46.3"}, {"business_id": "MSME0098", "business_name": "Golden Works", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "1", "compliance_score": "43.0", "cash_flow_score": "62.7", "banking_score": "49.5", "stability_score": "30.7", "composite_score": "48.1", "grade": "C", "explanation": "Strongest signal: cash flow (UPI) (63/100). Weakest signal: workforce stability (EPFO) (31/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-3", "business_vintage_years": "4.9", "traditional_score": "43.0"}, {"business_id": "MSME0099", "business_name": "Golden Systems", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "76.0", "cash_flow_score": "73.2", "banking_score": "82.3", "stability_score": "94.2", "composite_score": "80.4", "grade": "A", "explanation": "Strongest signal: workforce stability (EPFO) (94/100). Weakest signal: cash flow (UPI) (73/100).", "sector": "IT Services", "city_tier": "Tier-1", "business_vintage_years": "11.5", "traditional_score": "76.0"}, {"business_id": "MSME0100", "business_name": "Jai Movers", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "75.6", "cash_flow_score": "72.8", "banking_score": "84.8", "stability_score": "88.3", "composite_score": "79.6", "grade": "A", "explanation": "Strongest signal: workforce stability (EPFO) (88/100). Weakest signal: cash flow (UPI) (73/100).", "sector": "Logistics & Transport", "city_tier": "Tier-2", "business_vintage_years": "7.7", "traditional_score": "75.6"}, {"business_id": "MSME0101", "business_name": "Royal Roadways", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "68.9", "cash_flow_score": "77.5", "banking_score": "79.2", "stability_score": "80.8", "composite_score": "76.4", "grade": "A", "explanation": "Strongest signal: workforce stability (EPFO) (81/100). Weakest signal: GST compliance (69/100).", "sector": "Logistics & Transport", "city_tier": "Tier-3", "business_vintage_years": "8.7", "traditional_score": "68.9"}, {"business_id": "MSME0102", "business_name": "Global Stores", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "13.5", "cash_flow_score": "15.5", "banking_score": "31.6", "stability_score": "13.9", "composite_score": "18.7", "grade": "D", "explanation": "Strongest signal: banking behavior (32/100). Weakest signal: GST compliance (14/100).", "sector": "Retail Trade", "city_tier": "Tier-1", "business_vintage_years": "5.4", "traditional_score": "13.5"}, {"business_id": "MSME0103", "business_name": "Prime Healthcare", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "54.8", "cash_flow_score": "53.8", "banking_score": "54.5", "stability_score": "52.5", "composite_score": "54.0", "grade": "C", "explanation": "Strongest signal: GST compliance (55/100). Weakest signal: workforce stability (EPFO) (53/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-2", "business_vintage_years": "3.8", "traditional_score": "54.8"}, {"business_id": "MSME0104", "business_name": "Ganesh Fabrics", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "54.1", "cash_flow_score": "60.3", "banking_score": "48.1", "stability_score": "49.4", "composite_score": "53.5", "grade": "C", "explanation": "Strongest signal: cash flow (UPI) (60/100). Weakest signal: banking behavior (48/100).", "sector": "Textile & Apparel", "city_tier": "Tier-2", "business_vintage_years": "3.0", "traditional_score": "54.1"}, {"business_id": "MSME0105", "business_name": "Vijay Manufacturing Co", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "45.2", "cash_flow_score": "51.0", "banking_score": "32.1", "stability_score": "38.1", "composite_score": "42.3", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (51/100). Weakest signal: banking behavior (32/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-1", "business_vintage_years": "0.1", "traditional_score": "45.2"}, {"business_id": "MSME0106", "business_name": "Modern Retail Co", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "56.1", "cash_flow_score": "42.8", "banking_score": "38.1", "stability_score": "51.3", "composite_score": "46.7", "grade": "C", "explanation": "Strongest signal: GST compliance (56/100). Weakest signal: banking behavior (38/100).", "sector": "Retail Trade", "city_tier": "Tier-2", "business_vintage_years": "7.8", "traditional_score": "56.1"}, {"business_id": "MSME0107", "business_name": "Classic Roadways", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "70.6", "cash_flow_score": "61.8", "banking_score": "69.7", "stability_score": "47.2", "composite_score": "63.1", "grade": "B", "explanation": "Strongest signal: GST compliance (71/100). Weakest signal: workforce stability (EPFO) (47/100).", "sector": "Logistics & Transport", "city_tier": "Tier-2", "business_vintage_years": "3.4", "traditional_score": "70.6"}, {"business_id": "MSME0108", "business_name": "New Agro Industries", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "32.9", "cash_flow_score": "50.8", "banking_score": "42.0", "stability_score": "22.7", "composite_score": "38.5", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (51/100). Weakest signal: workforce stability (EPFO) (23/100).", "sector": "Agri-Trading", "city_tier": "Tier-3", "business_vintage_years": "1.5", "traditional_score": "32.9"}, {"business_id": "MSME0109", "business_name": "Om Manufacturing Co", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "1", "compliance_score": "43.1", "cash_flow_score": "63.7", "banking_score": "50.7", "stability_score": "61.6", "composite_score": "54.9", "grade": "C", "explanation": "Strongest signal: cash flow (UPI) (64/100). Weakest signal: GST compliance (43/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-3", "business_vintage_years": "4.5", "traditional_score": "43.1"}, {"business_id": "MSME0110", "business_name": "Ganesh Building Materials", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "77.1", "cash_flow_score": "79.5", "banking_score": "86.6", "stability_score": "78.0", "composite_score": "80.4", "grade": "A", "explanation": "Strongest signal: banking behavior (87/100). Weakest signal: GST compliance (77/100).", "sector": "Construction Materials", "city_tier": "Tier-3", "business_vintage_years": "6.1", "traditional_score": "77.1"}, {"business_id": "MSME0111", "business_name": "Laxmi Industries", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "49.7", "cash_flow_score": "39.9", "banking_score": "43.9", "stability_score": "33.1", "composite_score": "42.0", "grade": "D", "explanation": "Strongest signal: GST compliance (50/100). Weakest signal: workforce stability (EPFO) (33/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-3", "business_vintage_years": "6.2", "traditional_score": "49.7"}, {"business_id": "MSME0112", "business_name": "Shree Logistics", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "83.9", "cash_flow_score": "86.9", "banking_score": "66.0", "stability_score": "68.7", "composite_score": "77.3", "grade": "A", "explanation": "Strongest signal: cash flow (UPI) (87/100). Weakest signal: banking behavior (66/100).", "sector": "Logistics & Transport", "city_tier": "Tier-3", "business_vintage_years": "12.0", "traditional_score": "83.9"}, {"business_id": "MSME0113", "business_name": "Vijay Engineering Works", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "38.7", "cash_flow_score": "49.1", "banking_score": "42.3", "stability_score": "38.6", "composite_score": "42.7", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (49/100). Weakest signal: workforce stability (EPFO) (39/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-1", "business_vintage_years": "1.6", "traditional_score": "38.7"}, {"business_id": "MSME0114", "business_name": "New Textiles", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "41.9", "cash_flow_score": "48.8", "banking_score": "53.8", "stability_score": "27.3", "composite_score": "44.0", "grade": "D", "explanation": "Strongest signal: banking behavior (54/100). Weakest signal: workforce stability (EPFO) (27/100).", "sector": "Textile & Apparel", "city_tier": "Tier-1", "business_vintage_years": "0.1", "traditional_score": "41.9"}, {"business_id": "MSME0115", "business_name": "Shri Agri Exports", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "0", "compliance_score": "23.9", "cash_flow_score": "12.2", "banking_score": "6.6", "stability_score": "21.6", "composite_score": "15.6", "grade": "D", "explanation": "Strongest signal: GST compliance (24/100). Weakest signal: banking behavior (7/100).", "sector": "Agri-Trading", "city_tier": "Tier-1", "business_vintage_years": "2.0", "traditional_score": "23.9"}, {"business_id": "MSME0116", "business_name": "Om Works", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "21.9", "cash_flow_score": "33.5", "banking_score": "40.4", "stability_score": "41.4", "composite_score": "33.9", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (41/100). Weakest signal: GST compliance (22/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-3", "business_vintage_years": "0.1", "traditional_score": "21.9"}, {"business_id": "MSME0117", "business_name": "New Garments", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "32.4", "cash_flow_score": "50.6", "banking_score": "45.0", "stability_score": "38.2", "composite_score": "42.2", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (51/100). Weakest signal: GST compliance (32/100).", "sector": "Textile & Apparel", "city_tier": "Tier-2", "business_vintage_years": "1.2", "traditional_score": "32.4"}, {"business_id": "MSME0118", "business_name": "Ananya Garage", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "82.1", "cash_flow_score": "56.2", "banking_score": "79.4", "stability_score": "86.8", "composite_score": "74.6", "grade": "B", "explanation": "Strongest signal: workforce stability (EPFO) (87/100). Weakest signal: cash flow (UPI) (56/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-1", "business_vintage_years": "6.7", "traditional_score": "82.1"}, {"business_id": "MSME0119", "business_name": "Jai Roadways", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "43.1", "cash_flow_score": "37.6", "banking_score": "19.4", "stability_score": "34.1", "composite_score": "33.7", "grade": "D", "explanation": "Strongest signal: GST compliance (43/100). Weakest signal: banking behavior (19/100).", "sector": "Logistics & Transport", "city_tier": "Tier-2", "business_vintage_years": "0.3", "traditional_score": "43.1"}, {"business_id": "MSME0120", "business_name": "Laxmi Softwares", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "67.9", "cash_flow_score": "53.9", "banking_score": "55.2", "stability_score": "38.0", "composite_score": "54.5", "grade": "C", "explanation": "Strongest signal: GST compliance (68/100). Weakest signal: workforce stability (EPFO) (38/100).", "sector": "IT Services", "city_tier": "Tier-1", "business_vintage_years": "3.2", "traditional_score": "67.9"}, {"business_id": "MSME0121", "business_name": "New Movers", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "35.3", "cash_flow_score": "42.5", "banking_score": "40.0", "stability_score": "52.5", "composite_score": "42.1", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (53/100). Weakest signal: GST compliance (35/100).", "sector": "Logistics & Transport", "city_tier": "Tier-2", "business_vintage_years": "0.1", "traditional_score": "35.3"}, {"business_id": "MSME0122", "business_name": "Silver Fabricators", "is_ntc_ntb": "True", "vintage_cohort": "growing", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "27.1", "cash_flow_score": "35.3", "banking_score": "35.6", "stability_score": "37.2", "composite_score": "33.7", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (37/100). Weakest signal: GST compliance (27/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-1", "business_vintage_years": "3.9", "traditional_score": "27.1"}, {"business_id": "MSME0123", "business_name": "Guru Textiles", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "37.9", "cash_flow_score": "44.9", "banking_score": "52.6", "stability_score": "54.6", "composite_score": "47.0", "grade": "C", "explanation": "Strongest signal: workforce stability (EPFO) (55/100). Weakest signal: GST compliance (38/100).", "sector": "Textile & Apparel", "city_tier": "Tier-3", "business_vintage_years": "2.5", "traditional_score": "37.9"}, {"business_id": "MSME0124", "business_name": "Sai Fabricators", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "79.7", "cash_flow_score": "71.2", "banking_score": "66.7", "stability_score": "75.8", "composite_score": "73.1", "grade": "B", "explanation": "Strongest signal: GST compliance (80/100). Weakest signal: banking behavior (67/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-2", "business_vintage_years": "11.0", "traditional_score": "79.7"}, {"business_id": "MSME0125", "business_name": "United Softwares", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "55.2", "cash_flow_score": "38.6", "banking_score": "42.4", "stability_score": "49.1", "composite_score": "45.8", "grade": "C", "explanation": "Strongest signal: GST compliance (55/100). Weakest signal: cash flow (UPI) (39/100).", "sector": "IT Services", "city_tier": "Tier-1", "business_vintage_years": "3.3", "traditional_score": "55.2"}, {"business_id": "MSME0126", "business_name": "Prime Fabricators", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "33.4", "cash_flow_score": "57.1", "banking_score": "52.1", "stability_score": "53.5", "composite_score": "49.2", "grade": "C", "explanation": "Strongest signal: cash flow (UPI) (57/100). Weakest signal: GST compliance (33/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-1", "business_vintage_years": "5.9", "traditional_score": "33.4"}, {"business_id": "MSME0127", "business_name": "Global Textiles", "is_ntc_ntb": "True", "vintage_cohort": "growing", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "28.6", "cash_flow_score": "37.3", "banking_score": "57.5", "stability_score": "45.9", "composite_score": "41.9", "grade": "D", "explanation": "Strongest signal: banking behavior (58/100). Weakest signal: GST compliance (29/100).", "sector": "Textile & Apparel", "city_tier": "Tier-2", "business_vintage_years": "2.7", "traditional_score": "28.6"}, {"business_id": "MSME0128", "business_name": "Ananya Traders", "is_ntc_ntb": "True", "vintage_cohort": "growing", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "1", "compliance_score": "47.4", "cash_flow_score": "57.4", "banking_score": "64.3", "stability_score": "38.4", "composite_score": "52.8", "grade": "C", "explanation": "Strongest signal: banking behavior (64/100). Weakest signal: workforce stability (EPFO) (38/100).", "sector": "Retail Trade", "city_tier": "Tier-1", "business_vintage_years": "4.0", "traditional_score": "47.4"}, {"business_id": "MSME0129", "business_name": "Shri Beverages", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "1", "compliance_score": "79.8", "cash_flow_score": "89.7", "banking_score": "68.6", "stability_score": "89.8", "composite_score": "82.0", "grade": "A", "explanation": "Strongest signal: workforce stability (EPFO) (90/100). Weakest signal: banking behavior (69/100).", "sector": "Food & Beverage", "city_tier": "Tier-1", "business_vintage_years": "7.9", "traditional_score": "79.8"}, {"business_id": "MSME0130", "business_name": "Star Manufacturing Co", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "58.5", "cash_flow_score": "54.8", "banking_score": "45.6", "stability_score": "53.5", "composite_score": "53.2", "grade": "C", "explanation": "Strongest signal: GST compliance (58/100). Weakest signal: banking behavior (46/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-1", "business_vintage_years": "4.6", "traditional_score": "58.5"}, {"business_id": "MSME0131", "business_name": "Silver Auto Works", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "48.7", "cash_flow_score": "56.8", "banking_score": "54.9", "stability_score": "65.3", "composite_score": "56.0", "grade": "C", "explanation": "Strongest signal: workforce stability (EPFO) (65/100). Weakest signal: GST compliance (49/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-2", "business_vintage_years": "3.2", "traditional_score": "48.7"}, {"business_id": "MSME0132", "business_name": "New General Store", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "1", "compliance_score": "63.0", "cash_flow_score": "45.2", "banking_score": "37.2", "stability_score": "60.3", "composite_score": "50.7", "grade": "C", "explanation": "Strongest signal: GST compliance (63/100). Weakest signal: banking behavior (37/100).", "sector": "Retail Trade", "city_tier": "Tier-2", "business_vintage_years": "4.3", "traditional_score": "63.0"}, {"business_id": "MSME0133", "business_name": "Guru Wellness", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "1", "compliance_score": "67.7", "cash_flow_score": "71.4", "banking_score": "67.7", "stability_score": "89.9", "composite_score": "73.3", "grade": "B", "explanation": "Strongest signal: workforce stability (EPFO) (90/100). Weakest signal: GST compliance (68/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-1", "business_vintage_years": "9.0", "traditional_score": "67.7"}, {"business_id": "MSME0134", "business_name": "Classic Industries", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "57.1", "cash_flow_score": "63.7", "banking_score": "47.6", "stability_score": "48.1", "composite_score": "54.9", "grade": "C", "explanation": "Strongest signal: cash flow (UPI) (64/100). Weakest signal: banking behavior (48/100).", "sector": "Manufacturing (Light)", "city_tier": "Tier-3", "business_vintage_years": "3.6", "traditional_score": "57.1"}, {"business_id": "MSME0135", "business_name": "Prime Fabrics", "is_ntc_ntb": "True", "vintage_cohort": "growing", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "28.0", "cash_flow_score": "46.6", "banking_score": "43.6", "stability_score": "21.6", "composite_score": "36.2", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (47/100). Weakest signal: workforce stability (EPFO) (22/100).", "sector": "Textile & Apparel", "city_tier": "Tier-3", "business_vintage_years": "3.4", "traditional_score": "28.0"}, {"business_id": "MSME0136", "business_name": "Royal Farm Fresh", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "35.3", "cash_flow_score": "31.3", "banking_score": "16.7", "stability_score": "54.8", "composite_score": "33.3", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (55/100). Weakest signal: banking behavior (17/100).", "sector": "Agri-Trading", "city_tier": "Tier-2", "business_vintage_years": "5.4", "traditional_score": "35.3"}, {"business_id": "MSME0137", "business_name": "New Infotech", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "38.9", "cash_flow_score": "40.4", "banking_score": "26.9", "stability_score": "54.7", "composite_score": "39.5", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (55/100). Weakest signal: banking behavior (27/100).", "sector": "IT Services", "city_tier": "Tier-3", "business_vintage_years": "6.1", "traditional_score": "38.9"}, {"business_id": "MSME0138", "business_name": "Classic Builders", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "1", "compliance_score": "32.4", "cash_flow_score": "22.1", "banking_score": "12.3", "stability_score": "17.2", "composite_score": "21.2", "grade": "D", "explanation": "Strongest signal: GST compliance (32/100). Weakest signal: banking behavior (12/100).", "sector": "Construction Materials", "city_tier": "Tier-2", "business_vintage_years": "2.8", "traditional_score": "32.4"}, {"business_id": "MSME0139", "business_name": "Sai Pharma", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "54.2", "cash_flow_score": "25.1", "banking_score": "38.8", "stability_score": "52.4", "composite_score": "41.3", "grade": "D", "explanation": "Strongest signal: GST compliance (54/100). Weakest signal: cash flow (UPI) (25/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-1", "business_vintage_years": "5.0", "traditional_score": "54.2"}, {"business_id": "MSME0140", "business_name": "Vishwa Apparels", "is_ntc_ntb": "True", "vintage_cohort": "growing", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "28.6", "cash_flow_score": "25.8", "banking_score": "33.8", "stability_score": "50.0", "composite_score": "33.4", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (50/100). Weakest signal: cash flow (UPI) (26/100).", "sector": "Textile & Apparel", "city_tier": "Tier-1", "business_vintage_years": "2.2", "traditional_score": "28.6"}, {"business_id": "MSME0141", "business_name": "Metro Auto Works", "is_ntc_ntb": "True", "vintage_cohort": "growing", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "31.9", "cash_flow_score": "48.6", "banking_score": "30.5", "stability_score": "38.4", "composite_score": "37.8", "grade": "D", "explanation": "Strongest signal: cash flow (UPI) (49/100). Weakest signal: banking behavior (30/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-3", "business_vintage_years": "2.5", "traditional_score": "31.9"}, {"business_id": "MSME0142", "business_name": "Om Motors", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "56.5", "cash_flow_score": "57.0", "banking_score": "67.2", "stability_score": "75.1", "composite_score": "63.0", "grade": "B", "explanation": "Strongest signal: workforce stability (EPFO) (75/100). Weakest signal: GST compliance (56/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-3", "business_vintage_years": "8.0", "traditional_score": "56.5"}, {"business_id": "MSME0143", "business_name": "Maa Movers", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "43.6", "cash_flow_score": "37.3", "banking_score": "42.7", "stability_score": "40.6", "composite_score": "40.9", "grade": "D", "explanation": "Strongest signal: GST compliance (44/100). Weakest signal: cash flow (UPI) (37/100).", "sector": "Logistics & Transport", "city_tier": "Tier-3", "business_vintage_years": "9.5", "traditional_score": "43.6"}, {"business_id": "MSME0144", "business_name": "City Mart", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "51.8", "cash_flow_score": "74.8", "banking_score": "72.5", "stability_score": "36.2", "composite_score": "60.7", "grade": "B", "explanation": "Strongest signal: cash flow (UPI) (75/100). Weakest signal: workforce stability (EPFO) (36/100).", "sector": "Retail Trade", "city_tier": "Tier-2", "business_vintage_years": "4.9", "traditional_score": "51.8"}, {"business_id": "MSME0145", "business_name": "Shri General Store", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "69.8", "cash_flow_score": "43.9", "banking_score": "38.9", "stability_score": "45.9", "composite_score": "49.5", "grade": "C", "explanation": "Strongest signal: GST compliance (70/100). Weakest signal: banking behavior (39/100).", "sector": "Retail Trade", "city_tier": "Tier-3", "business_vintage_years": "4.1", "traditional_score": "69.8"}, {"business_id": "MSME0146", "business_name": "Silver Life Sciences", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "89.0", "cash_flow_score": "73.5", "banking_score": "87.1", "stability_score": "87.5", "composite_score": "83.6", "grade": "A", "explanation": "Strongest signal: GST compliance (89/100). Weakest signal: cash flow (UPI) (74/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-1", "business_vintage_years": "7.5", "traditional_score": "89.0"}, {"business_id": "MSME0147", "business_name": "Sunrise Life Sciences", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Risky", "defaulted_12m": "1", "compliance_score": "21.8", "cash_flow_score": "17.9", "banking_score": "12.6", "stability_score": "34.1", "composite_score": "20.8", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (34/100). Weakest signal: banking behavior (13/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-3", "business_vintage_years": "3.2", "traditional_score": "21.8"}, {"business_id": "MSME0148", "business_name": "Vijay Food Products", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "39.0", "cash_flow_score": "31.6", "banking_score": "41.9", "stability_score": "52.4", "composite_score": "40.2", "grade": "D", "explanation": "Strongest signal: workforce stability (EPFO) (52/100). Weakest signal: cash flow (UPI) (32/100).", "sector": "Food & Beverage", "city_tier": "Tier-3", "business_vintage_years": "7.2", "traditional_score": "39.0"}, {"business_id": "MSME0149", "business_name": "Ananya Life Sciences", "is_ntc_ntb": "False", "vintage_cohort": "established", "segment_hidden_label": "Healthy", "defaulted_12m": "0", "compliance_score": "81.4", "cash_flow_score": "75.2", "banking_score": "80.9", "stability_score": "85.9", "composite_score": "80.3", "grade": "A", "explanation": "Strongest signal: workforce stability (EPFO) (86/100). Weakest signal: cash flow (UPI) (75/100).", "sector": "Pharma & Healthcare Retail", "city_tier": "Tier-1", "business_vintage_years": "8.3", "traditional_score": "81.4"}, {"business_id": "MSME0150", "business_name": "Sunrise Motors", "is_ntc_ntb": "False", "vintage_cohort": "growing", "segment_hidden_label": "Average", "defaulted_12m": "0", "compliance_score": "63.2", "cash_flow_score": "47.9", "banking_score": "57.4", "stability_score": "57.9", "composite_score": "56.1", "grade": "C", "explanation": "Strongest signal: GST compliance (63/100). Weakest signal: cash flow (UPI) (48/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-1", "business_vintage_years": "2.7", "traditional_score": "63.2"}, {"business_id": "MSME_HERO_1", "business_name": "Shree Ganesh Fabrics", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "41.9", "cash_flow_score": "87.4", "banking_score": "91.3", "stability_score": "73.5", "composite_score": "74.2", "grade": "B", "explanation": "Strongest signal: banking behavior (91/100). Weakest signal: GST compliance (42/100).", "sector": "Textile & Apparel", "city_tier": "Tier-2", "business_vintage_years": "1.8", "traditional_score": "41.9"}, {"business_id": "MSME_HERO_2", "business_name": "QuickFix Auto Care", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "50.6", "cash_flow_score": "80.6", "banking_score": "80.4", "stability_score": "66.7", "composite_score": "70.3", "grade": "B", "explanation": "Strongest signal: cash flow (UPI) (81/100). Weakest signal: GST compliance (51/100).", "sector": "Auto Repair & Parts", "city_tier": "Tier-3", "business_vintage_years": "1.5", "traditional_score": "50.6"}, {"business_id": "MSME_HERO_3", "business_name": "GreenLeaf Agro Traders", "is_ntc_ntb": "True", "vintage_cohort": "new", "segment_hidden_label": "NTC_NTB", "defaulted_12m": "0", "compliance_score": "43.4", "cash_flow_score": "90.5", "banking_score": "85.9", "stability_score": "72.3", "composite_score": "73.9", "grade": "B", "explanation": "Strongest signal: cash flow (UPI) (90/100). Weakest signal: GST compliance (43/100).", "sector": "Agri-Trading", "city_tier": "Tier-2", "business_vintage_years": "1.9", "traditional_score": "43.4"}];
+
+const SUBSCORES = [
+  {key:'compliance_score', name:'Compliance', source:'GST filings', color:'#1F8A5B'},
+  {key:'cash_flow_score', name:'Cash Flow', source:'UPI transactions', color:'#C9A227'},
+  {key:'banking_score', name:'Banking Behavior', source:'Account Aggregator', color:'#2A5C8A'},
+  {key:'stability_score', name:'Workforce Stability', source:'EPFO', color:'#8A5C9A'},
+];
+
+let searchTerm='', gradeFilter='all', segmentFilter='all';
+
+function gradeColor(g){return {A:'#1F8A5B',B:'#2A5C8A',C:'#B8862B',D:'#C0504D'}[g];}
+function gradeSoft(g){return {A:'#E3F3EA',B:'#E8F0FA',C:'#F7EFDD',D:'#FBEBEA'}[g];}
+
+function animateCounter(el, target, decimals=0, duration=700){
+  const start = performance.now();
+  function tick(now){
+    const p = Math.min(1,(now-start)/duration);
+    const eased = 1-Math.pow(1-p,3);
+    el.textContent = (target*eased).toFixed(decimals);
+    if(p<1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function icon(name){
+  const icons = {
+    building:'<path d="M4 21V7l8-4 8 4v14"/><path d="M9 21v-6h6v6"/><path d="M9 11h.01M15 11h.01M9 15h.01M15 15h.01"/>',
+    users:'<circle cx="9" cy="8" r="3"/><path d="M2 21v-1a6 6 0 016-6h2a6 6 0 016 6v1"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 21v-1a5 5 0 015.5-5"/>',
+    trend:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 6h6v6"/>',
+    check:'<circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/>',
+  };
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icons[name]}</svg>`;
+}
+
+function renderKPIs(){
+  const total = DATA.length;
+  const ntc = DATA.filter(b=>b.is_ntc_ntb==='True').length;
+  const avg = DATA.reduce((s,b)=>s+parseFloat(b.composite_score),0)/total;
+  const ab = DATA.filter(b=>b.grade==='A'||b.grade==='B').length;
+
+  const cards = [
+    {icon:'building', color:'#1F8A5B', bg:'#E3F3EA', label:'Businesses Scored', value:total, decimals:0, trend:'Live portfolio', trendClass:'trend-flat'},
+    {icon:'users', color:'#2A5C8A', bg:'#E8F0FA', label:'New-to-Credit / New-to-Bank', value:ntc, decimals:0, trend:`${Math.round(100*ntc/total)}% of portfolio`, trendClass:'trend-up'},
+    {icon:'trend', color:'#B8862B', bg:'#F7EFDD', label:'Average Health Score', value:avg, decimals:1, trend:'out of 100', trendClass:'trend-flat'},
+    {icon:'check', color:'#146945', bg:'#E3F3EA', label:'Grade A/B (Approvable)', value:ab, decimals:0, trend:`${Math.round(100*ab/total)}% of portfolio`, trendClass:'trend-up'},
+  ];
+
+  document.getElementById('kpiRow').innerHTML = cards.map(c=>`
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <div class="kpi-icon" style="background:${c.bg};color:${c.color}">${icon(c.icon)}</div>
+        <span class="kpi-trend ${c.trendClass}">${c.trend}</span>
+      </div>
+      <div class="kpi-value" data-target="${c.value}" data-decimals="${c.decimals}">0</div>
+      <div class="kpi-label">${c.label}</div>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.kpi-value').forEach(el=>{
+    animateCounter(el, parseFloat(el.dataset.target), parseInt(el.dataset.decimals));
+  });
+}
+
+function renderDonut(){
+  const counts = {A:0,B:0,C:0,D:0};
+  DATA.forEach(b=>counts[b.grade]++);
+  const total = DATA.length;
+  const colors = {A:'#1F8A5B',B:'#2A5C8A',C:'#B8862B',D:'#C0504D'};
+  const r = 46, cx=56, cy=56, circumference = 2*Math.PI*r;
+  let offset = 0;
+  let arcs = '';
+  ['A','B','C','D'].forEach(g=>{
+    const frac = counts[g]/total;
+    const len = frac*circumference;
+    arcs += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[g]}" stroke-width="14"
+      stroke-dasharray="${len} ${circumference-len}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${cx} ${cy})"/>`;
+    offset += len;
+  });
+
+  document.getElementById('donutWrap').innerHTML = `
+    <svg width="112" height="112" viewBox="0 0 112 112">${arcs}
+      <text x="56" y="52" text-anchor="middle" font-size="20" font-weight="800" fill="#161C18" font-family="Inter">${total}</text>
+      <text x="56" y="68" text-anchor="middle" font-size="9.5" fill="#6C7670" font-family="Inter">TOTAL</text>
+    </svg>
+    <div class="donut-legend">
+      ${['A','B','C','D'].map(g=>`
+        <div class="legend-item">
+          <span class="legend-dot" style="background:${colors[g]}"></span>
+          Grade ${g}
+          <span class="legend-count">${counts[g]}</span>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderRadar(){
+  const avgs = SUBSCORES.map(s=> DATA.reduce((sum,b)=>sum+parseFloat(b[s.key]),0)/DATA.length);
+  const cx=90, cy=80, maxR=58;
+  const n = SUBSCORES.length;
+  const angle = i => (Math.PI*2*i/n) - Math.PI/2;
+
+  function pointAt(i, val){
+    const r = (val/100)*maxR;
+    return [cx + r*Math.cos(angle(i)), cy + r*Math.sin(angle(i))];
+  }
+
+  const gridLevels = [25,50,75,100];
+  const gridPolys = gridLevels.map(level=>{
+    const pts = SUBSCORES.map((_,i)=>pointAt(i,level).join(',')).join(' ');
+    return `<polygon points="${pts}" fill="none" stroke="#E4E0D3" stroke-width="1"/>`;
+  }).join('');
+
+  const dataPts = SUBSCORES.map((_,i)=>pointAt(i,avgs[i]).join(',')).join(' ');
+  const labels = SUBSCORES.map((s,i)=>{
+    const [lx,ly] = pointAt(i, 118);
+    return `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="9.5" fill="#6C7670" font-family="Inter">${s.name.split(' ')[0]}</text>`;
+  }).join('');
+
+  document.getElementById('radarWrap').innerHTML = `
+    <svg width="180" height="160" viewBox="0 0 180 160">
+      ${gridPolys}
+      <polygon points="${dataPts}" fill="rgba(31,138,91,0.18)" stroke="#1F8A5B" stroke-width="2"/>
+      ${SUBSCORES.map((_,i)=>{const [x,y]=pointAt(i,avgs[i]);return `<circle cx="${x}" cy="${y}" r="3" fill="#1F8A5B"/>`;}).join('')}
+      ${labels}
+    </svg>
+  `;
+}
+
+function renderInsights(){
+  const ntcRows = DATA.filter(b=>b.is_ntc_ntb==='True');
+  const heroRows = DATA.filter(b=>b.business_id.includes('HERO'));
+  const gradeAB_ntc = ntcRows.filter(b=>b.grade==='A'||b.grade==='B').length;
+  const bySector = {};
+  DATA.forEach(b=>{ (bySector[b.sector] ||= []).push(parseFloat(b.composite_score)); });
+  let topSector = null, topAvg = -1;
+  Object.entries(bySector).forEach(([sec,scores])=>{
+    const avg = scores.reduce((a,b)=>a+b,0)/scores.length;
+    if(avg>topAvg){topAvg=avg;topSector=sec;}
+  });
+  const avgUplift = heroRows.length
+    ? (heroRows.reduce((s,b)=>s+(parseFloat(b.composite_score)-parseFloat(b.traditional_score)),0)/heroRows.length)
+    : 0;
+
+  const insights = [
+    `${ntcRows.length} businesses are New-to-Credit / New-to-Bank; ${gradeAB_ntc} of them score Grade A/B on alternate data despite thin formal credit history.`,
+    `${topSector} shows the strongest average health score (${topAvg.toFixed(0)}/100) across the portfolio.`,
+    `Curated hidden-gem cases show an average uplift of <b>+${avgUplift.toFixed(0)} points</b> when alternate data is added to GST-only assessment.`,
+  ];
+
+  document.getElementById('insightsList').innerHTML = insights.map((t,i)=>`
+    <div class="insight-item">
+      <div class="insight-bullet">${i+1}</div>
+      <div>${t}</div>
+    </div>
+  `).join('');
+}
+
+function loanRecommendation(biz){
+  const grade = biz.grade;
+  const composite = parseFloat(biz.composite_score);
+  const cashFlow = parseFloat(biz.cash_flow_score);
+  let amount, terms, badge;
+  if(grade==='A'){
+    amount = '₹12,00,000 – ₹18,00,000';
+    terms = 'Unsecured working capital loan. Annual review cycle recommended.';
+    badge = 'Recommended: Approve';
+  } else if(grade==='B'){
+    amount = '₹5,00,000 – ₹10,00,000';
+    terms = `Working capital loan with monitoring. Quarterly review recommended given ${cashFlow<60?'cash flow variability':'compliance history'}.`;
+    badge = 'Recommended: Approve with monitoring';
+  } else if(grade==='C'){
+    amount = '₹1,00,000 – ₹3,00,000';
+    terms = 'Smaller ticket size or secured loan. Monthly monitoring, re-assess in 6 months.';
+    badge = 'Conditional approval';
+  } else {
+    amount = 'Not recommended currently';
+    terms = 'Suggest financial literacy support and re-assessment in 12 months as data history builds.';
+    badge = 'Hold';
+  }
+  return {amount, terms, badge};
+}
+
+function openDrawer(biz){
+  const isHero = biz.business_id.includes('HERO');
+  const gColor = gradeColor(biz.grade);
+  const gSoft = gradeSoft(biz.grade);
+  const traditionalScore = parseFloat(biz.traditional_score);
+  const composite = parseFloat(biz.composite_score);
+  const uplift = composite - traditionalScore;
+  const loan = loanRecommendation(biz);
+
+  document.getElementById('drawer').innerHTML = `
+    <div class="drawer-head">
+      <div>
+        <div class="drawer-title">${biz.business_name}${isHero?'<span class="dtag gold" style="margin-left:8px;">Hidden Gem</span>':''}</div>
+        <div class="drawer-meta">${biz.business_id} &middot; ${biz.sector} &middot; ${biz.city_tier}</div>
+        <div class="drawer-tags">
+          ${biz.is_ntc_ntb==='True'?'<span class="dtag">NTC / NTB</span>':''}
+          ${biz.defaulted_12m==='1'?'<span class="dtag risk">Defaulted (historical)</span>':''}
+          <span class="dtag">${parseFloat(biz.business_vintage_years).toFixed(1)} yrs operating</span>
+        </div>
+      </div>
+      <div class="drawer-close" id="drawerClose">&#10005;</div>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <div class="drawer-section-label">Financial Health Score</div>
+        <div class="gauge-block">
+          <div>
+            <span class="gauge-num" style="color:${gColor}">${composite.toFixed(0)}</span><span class="gauge-of">/100</span>
+            <div><span class="gauge-grade-chip" style="background:${gSoft};color:${gColor}">Grade ${biz.grade}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-section">
+        <div class="drawer-section-label">Score Breakdown</div>
+        ${SUBSCORES.map(s=>{
+          const val = parseFloat(biz[s.key]);
+          return `
+          <div class="sub-row">
+            <div class="sub-top"><span class="sub-name">${s.name}</span><span class="sub-val">${val.toFixed(0)}/100</span></div>
+            <div class="sub-track"><div class="sub-fill" data-w="${val}" style="background:${s.color}"></div></div>
+            <div class="sub-source">Source: ${s.source}</div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <div class="drawer-section">
+        <div class="drawer-section-label">AI Explanation</div>
+        <div class="explain-box">${biz.explanation.replace(/(\d+\/100)/g,'<b>$1</b>')}</div>
+      </div>
+
+      <div class="drawer-section">
+        <div class="drawer-section-label">Traditional vs. Alternate-Data Assessment</div>
+        <div class="compare-grid">
+          <div class="compare-box trad">
+            <div class="compare-label">Traditional</div>
+            <div class="compare-num">${traditionalScore.toFixed(0)}</div>
+            <div class="compare-verdict">${traditionalScore<45?'Likely rejected':'Conditional review'}</div>
+          </div>
+          <div class="compare-box alt">
+            <div class="compare-label">Alternate-Data</div>
+            <div class="compare-num">${composite.toFixed(0)}</div>
+            <div class="compare-verdict">${composite>=60?'Approve with monitoring':composite>=45?'Conditional approval':'Still high risk'}</div>
+          </div>
+        </div>
+        <div class="uplift-note">
+          ${uplift>15
+            ? `Adding UPI, Account Aggregator, and EPFO signals raises the assessed score by <b style="color:var(--ink)">${uplift.toFixed(0)} points</b> over GST-only assessment.`
+            : `GST compliance and alternate-data signals are broadly consistent for this business.`}
+        </div>
+      </div>
+
+      <div class="drawer-section">
+        <div class="drawer-section-label">Loan Recommendation</div>
+        <div class="loan-card">
+          <div class="loan-card-label">Suggested Facility</div>
+          <div class="loan-amount">${loan.amount}</div>
+          <div class="loan-terms">${loan.terms}</div>
+          <div class="loan-badge">${loan.badge}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+  document.getElementById('overlay').addEventListener('click', closeDrawer);
+
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.sub-fill').forEach(el=>{ el.style.width = el.dataset.w+'%'; });
+  });
+}
+
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function renderBizGrid(){
+  const term = searchTerm.toLowerCase();
+  const filtered = DATA.filter(b=>{
+    const matchesSearch = !term || b.business_name.toLowerCase().includes(term) || b.business_id.toLowerCase().includes(term);
+    const matchesGrade = gradeFilter==='all' || b.grade===gradeFilter;
+    const matchesSegment = segmentFilter==='all'
+      || (segmentFilter==='ntc' && b.is_ntc_ntb==='True')
+      || (segmentFilter==='hero' && b.business_id.includes('HERO'));
+    return matchesSearch && matchesGrade && matchesSegment;
+  }).sort((a,b)=> b.business_id.includes('HERO') - a.business_id.includes('HERO') || parseFloat(b.composite_score)-parseFloat(a.composite_score));
+
+  document.getElementById('resultCount').textContent = `${filtered.length} of ${DATA.length} shown`;
+  const grid = document.getElementById('bizGrid');
+
+  if(filtered.length===0){
+    grid.innerHTML = `<div class="empty-msg">No businesses match these filters.</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(b=>{
+    const isHero = b.business_id.includes('HERO');
+    const gColor = gradeColor(b.grade);
+    const composite = parseFloat(b.composite_score);
+    return `
+    <div class="biz-card" data-id="${b.business_id}">
+      <div class="biz-card-top">
+        <div>
+          <div class="biz-name">${b.business_name}${isHero?'<span class="hero-badge">Hidden Gem</span>':''}</div>
+          <div class="biz-sector">${b.sector} &middot; ${b.city_tier}</div>
+        </div>
+        <div class="grade-badge grade-${b.grade}">${b.grade}</div>
+      </div>
+      <div class="biz-progress-track"><div class="biz-progress-fill" data-w="${composite}" style="background:${gColor}"></div></div>
+      <div class="biz-card-foot">
+        <span>${b.is_ntc_ntb==='True' ? 'NTC / NTB' : 'Established'}</span>
+        <span class="biz-score-num">${composite.toFixed(0)}/100</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.biz-card').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const biz = DATA.find(b=>b.business_id===el.dataset.id);
+      openDrawer(biz);
+    });
+  });
+
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.biz-progress-fill').forEach(el=>{ el.style.width = el.dataset.w+'%'; });
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', e=>{ searchTerm=e.target.value; renderBizGrid(); });
+document.getElementById('gradeFilter').addEventListener('change', e=>{ gradeFilter=e.target.value; renderBizGrid(); });
+document.getElementById('segmentFilter').addEventListener('change', e=>{ segmentFilter=e.target.value; renderBizGrid(); });
+
+/* ---------------- REPORTS VIEW ---------------- */
+function renderReports(){
+  const segs = {};
+  DATA.forEach(b=>{ (segs[b.segment_hidden_label] ||= []).push(parseFloat(b.composite_score)); });
+  const segRows = Object.entries(segs).map(([seg,scores])=>{
+    const avg = scores.reduce((a,b)=>a+b,0)/scores.length;
+    return {seg, avg, n:scores.length};
+  }).sort((a,b)=>b.avg-a.avg);
+
+  const defs = {'0':[], '1':[]};
+  DATA.forEach(b=>{ defs[b.defaulted_12m]?.push(parseFloat(b.composite_score)); });
+  const avgNoDefault = defs['0'].reduce((a,b)=>a+b,0)/defs['0'].length;
+  const avgDefault = defs['1'].reduce((a,b)=>a+b,0)/defs['1'].length;
+
+  const ntcRows = DATA.filter(b=>b.is_ntc_ntb==='True');
+  const ntcAB = ntcRows.filter(b=>b.grade==='A'||b.grade==='B').length;
+
+  document.getElementById('reportsContent').innerHTML = `
+    <div class="drawer-section-label" style="margin-top:14px;">Average score by portfolio segment</div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+      <thead><tr style="text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase;">
+        <th style="padding:8px 0;border-bottom:2px solid var(--ink);">Segment</th>
+        <th style="padding:8px 0;border-bottom:2px solid var(--ink);">Avg Score</th>
+        <th style="padding:8px 0;border-bottom:2px solid var(--ink);">Count</th>
+      </tr></thead>
+      <tbody>
+        ${segRows.map(r=>`
+        <tr style="border-bottom:1px solid var(--glass-border);">
+          <td style="padding:9px 0;font-size:13px;font-weight:600;">${r.seg}</td>
+          <td style="padding:9px 0;font-size:13px;">${r.avg.toFixed(1)}</td>
+          <td style="padding:9px 0;font-size:13px;color:var(--muted);">${r.n}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+
+    <div class="drawer-section-label">Model validation against 12-month default outcomes</div>
+    <div class="compare-grid" style="margin-bottom:20px;">
+      <div class="compare-box alt">
+        <div class="compare-label">No Default</div>
+        <div class="compare-num">${avgNoDefault.toFixed(1)}</div>
+        <div class="compare-verdict">Average composite score</div>
+      </div>
+      <div class="compare-box trad">
+        <div class="compare-label">Defaulted (12m)</div>
+        <div class="compare-num">${avgDefault.toFixed(1)}</div>
+        <div class="compare-verdict">Average composite score</div>
+      </div>
+    </div>
+    <div class="uplift-note" style="margin-bottom:20px;">
+      Businesses that later defaulted scored <b style="color:var(--ink)">${(avgNoDefault-avgDefault).toFixed(1)} points lower on average</b>
+      than those that did not &mdash; the model separates risk correctly even though default outcome was never used as an input.
+    </div>
+
+    <div class="drawer-section-label">New-to-Credit / New-to-Bank inclusion</div>
+    <div class="explain-box">
+      ${ntcRows.length} businesses in this portfolio are NTC/NTB. <b>${ntcAB}</b> score Grade A/B on alternate-data
+      assessment despite limited formal credit history &mdash; businesses a GST-only model would otherwise reject outright.
+    </div>
+  `;
+}
+
+/* ---------------- SETTINGS VIEW ---------------- */
+function renderSettings(){
+  const weights = [
+    {name:'Compliance', source:'GST filings', weight:25, color:'#1F8A5B'},
+    {name:'Cash Flow', source:'UPI transactions', weight:30, color:'#C9A227'},
+    {name:'Banking Behavior', source:'Account Aggregator', weight:25, color:'#2A5C8A'},
+    {name:'Workforce Stability', source:'EPFO', weight:20, color:'#8A5C9A'},
+  ];
+  const grades = [
+    {grade:'A', range:'75 – 100', color:'#1F8A5B', soft:'#E3F3EA'},
+    {grade:'B', range:'60 – 74', color:'#2A5C8A', soft:'#E8F0FA'},
+    {grade:'C', range:'45 – 59', color:'#B8862B', soft:'#F7EFDD'},
+    {grade:'D', range:'0 – 44', color:'#C0504D', soft:'#FBEBEA'},
+  ];
+
+  document.getElementById('settingsContent').innerHTML = `
+    <div class="drawer-section-label" style="margin-top:14px;">Sub-score weights</div>
+    ${weights.map(w=>`
+      <div class="sub-row">
+        <div class="sub-top"><span class="sub-name">${w.name}</span><span class="sub-val">${w.weight}% &middot; ${w.source}</span></div>
+        <div class="sub-track"><div class="sub-fill" style="width:${w.weight*2}%;background:${w.color}"></div></div>
+      </div>
+    `).join('')}
+
+    <div class="drawer-section-label" style="margin-top:22px;">Grade thresholds</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;">
+      ${grades.map(g=>`
+        <div style="background:${g.soft};border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:18px;font-weight:800;color:${g.color}">${g.grade}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">${g.range}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="drawer-section-label">Methodology note</div>
+    <div class="explain-box">
+      Scale-dependent signals (UPI volume, average balance, employee count) are percentile-ranked within a
+      business-vintage cohort rather than against the full portfolio, so young or small businesses are not
+      penalized purely for their age or size. Pure behavioral ratios (bounce rate, retention, GST filing
+      punctuality, growth) are ranked against the full portfolio since good behavior is comparable regardless
+      of business age.
+    </div>
+  `;
+}
+
+/* ---------------- VIEW SWITCHING ---------------- */
+const VIEW_TITLES = {
+  overview:   {title:'Portfolio Overview', sub:'Unified credit health across GST, UPI, Account Aggregator & EPFO signals'},
+  businesses: {title:'Businesses', sub:'Full scored portfolio — search, filter, and open any business for detail'},
+  insights:   {title:'AI Insights', sub:'Portfolio-level signal mix and auto-generated observations'},
+  reports:    {title:'Validation Report', sub:'How the scoring model performs against known outcomes'},
+  settings:   {title:'Scoring Configuration', sub:'Weights, thresholds, and methodology behind the score'},
+};
+
+function switchView(view){
+  document.getElementById('kpiRow').style.display   = (view==='overview') ? 'grid' : 'none';
+  document.getElementById('chartsRow').style.display = (view==='overview' || view==='insights') ? 'grid' : 'none';
+  document.getElementById('listPanel').style.display = (view==='overview' || view==='businesses') ? 'block' : 'none';
+  document.getElementById('reportsPanel').style.display = (view==='reports') ? 'block' : 'none';
+  document.getElementById('settingsPanel').style.display = (view==='settings') ? 'block' : 'none';
+
+  document.querySelectorAll('.nav-item').forEach(el=>{
+    el.classList.toggle('active', el.dataset.view===view);
+  });
+
+  const meta = VIEW_TITLES[view];
+  document.querySelector('.page-title').textContent = meta.title;
+  document.querySelector('.page-sub').textContent = meta.sub;
+
+  if(view==='reports') renderReports();
+  if(view==='settings') renderSettings();
+}
+
+document.querySelectorAll('.nav-item').forEach(el=>{
+  el.addEventListener('click', ()=> switchView(el.dataset.view));
+});
+
+renderKPIs();
+renderDonut();
+renderRadar();
+renderInsights();
+renderBizGrid();
+</script>
+</body>
+</html>
